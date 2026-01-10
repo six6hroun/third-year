@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Водители</title>
+</head>
+<body>
+
+<h2>Таблица drivers</h2>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>ФИО</th>
+        <th>Номер лицензии</th>
+        <th>Стаж</th>
+        <th>Категория</th>
+        <th>Телефон</th>
+        <th>Дата найма</th>
+    </tr>
+
+    {% for d in drivers %}
+    <tr>
+        <td>{{ d.id }}</td>
+        <td>{{ d.full_name }}</td>
+        <td>{{ d.license_number }}</td>
+        <td>{{ d.experience }}</td>
+        <td>{{ d.category }}</td>
+        <td>{{ d.phone }}</td>
+        <td>{{ d.hire_date }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

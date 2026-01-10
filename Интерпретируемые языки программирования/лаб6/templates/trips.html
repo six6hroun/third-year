@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Рейсы</title>
+</head>
+<body>
+
+<h2>Таблица trips</h2>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>vehicle_id</th>
+        <th>driver_id</th>
+        <th>route_id</th>
+        <th>Время отправления</th>
+        <th>Время прибытия</th>
+        <th>Пассажиры</th>
+    </tr>
+
+    {% for t in trips %}
+    <tr>
+        <td>{{ t.id }}</td>
+        <td>{{ t.vehicle_id }}</td>
+        <td>{{ t.driver_id }}</td>
+        <td>{{ t.route_id }}</td>
+        <td>{{ t.departure_time }}</td>
+        <td>{{ t.arrival_time }}</td>
+        <td>{{ t.passengers_count }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

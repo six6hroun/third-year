@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Маршруты</title>
+</head>
+<body>
+
+<h2>Таблица routes</h2>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Номер маршрута</th>
+        <th>Начальная точка</th>
+        <th>Конечная точка</th>
+        <th>Дистанция (км)</th>
+        <th>Длительность (мин)</th>
+        <th>Стоимость</th>
+    </tr>
+
+    {% for r in routes %}
+    <tr>
+        <td>{{ r.id }}</td>
+        <td>{{ r.route_number }}</td>
+        <td>{{ r.start_point }}</td>
+        <td>{{ r.end_point }}</td>
+        <td>{{ r.distance_km }}</td>
+        <td>{{ r.duration_min }}</td>
+        <td>{{ r.fare_rub }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

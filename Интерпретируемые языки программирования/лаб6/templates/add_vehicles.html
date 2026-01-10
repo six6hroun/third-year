@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавить транспорт</title>
+</head>
+<body>
+
+<h2>Добавление записи в таблицу vehicles</h2>
+
+<form action="/vehicles/add" method="post">
+
+    <label>Тип транспорта:</label><br>
+    <select name="type" required>
+        <option value="автобус">автобус</option>
+        <option value="троллейбус">троллейбус</option>
+        <option value="трамвай">трамвай</option>
+        <option value="маршрутка">маршрутка</option>
+    </select>
+    <br><br>
+
+    <label>Номер маршрута:</label><br>
+    <input type="text" name="route_number" required>
+    <br><br>
+
+    <label>Модель:</label><br>
+    <input type="text" name="model">
+    <br><br>
+
+    <label>Год выпуска:</label><br>
+    <input type="number" name="year" min="2000" max="2025" required>
+    <br><br>
+
+    <label>Вместимость:</label><br>
+    <input type="number" name="capacity" min="1" required>
+    <br><br>
+
+    <button type="submit">Добавить</button>
+
+</form>
+
+<br>
+<a href="/vehicles">← Назад к списку транспорта</a>
+
+</body>
+</html>
