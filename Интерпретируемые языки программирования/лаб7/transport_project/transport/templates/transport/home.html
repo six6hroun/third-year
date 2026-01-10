@@ -1,0 +1,31 @@
+<!-- transport/templates/transport/home.html -->
+<h1>Все поездки</h1>
+<ul>
+{% for trip in trips %}
+    <li>
+        {% if trip.driver %}
+            {{ trip.driver.full_name }}
+        {% else %}
+            Без водителя
+        {% endif %}
+        -
+        {% if trip.vehicle %}
+            {{ trip.vehicle.model }}
+        {% else %}
+            Без транспорта
+        {% endif %}
+        -
+        {% if trip.route %}
+            {{ trip.route.route_number }}
+        {% else %}
+            Без маршрута
+        {% endif %}
+        <a href="{% url 'trip_detail' trip.id %}">[Детали]</a>
+        <a href="{% url 'trip_edit' trip.id %}">[Редактировать]</a>
+    </li>
+{% empty %}
+    <li>Поездок пока нет.</li>
+{% endfor %}
+</ul>
+
+<a href="{% url 'trip_add' %}">Добавить новую поездку</a>

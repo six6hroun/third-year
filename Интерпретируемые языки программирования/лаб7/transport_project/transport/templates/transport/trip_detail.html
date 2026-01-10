@@ -1,0 +1,18 @@
+<!-- transport/templates/transport/trip_detail.html -->
+<h1>Детали поездки</h1>
+
+<p><strong>Водитель:</strong>
+{% if trip.driver %} {{ trip.driver.full_name }} {% else %} Без водителя {% endif %}</p>
+
+<p><strong>Транспорт:</strong>
+{% if trip.vehicle %} {{ trip.vehicle.model }} {% else %} Без транспорта {% endif %}</p>
+
+<p><strong>Маршрут:</strong>
+{% if trip.route %} {{ trip.route.route_number }} {% else %} Без маршрута {% endif %}</p>
+
+<p><strong>Время отправления:</strong> {{ trip.departure_time }}</p>
+<p><strong>Время прибытия:</strong> {{ trip.arrival_time }}</p>
+<p><strong>Количество пассажиров:</strong> {{ trip.passengers_count }}</p>
+
+<a href="{% url 'home' %}">Назад</a>
+<a href="{% url 'trip_edit' trip.id %}">Редактировать</a>
