@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>class StudentsListJSON - RDoc Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+  var index_rel_prefix = "./";
+</script>
+
+<script src="./js/navigation.js" defer></script>
+<script src="./js/search.js" defer></script>
+<script src="./js/search_index.js" defer></script>
+<script src="./js/searcher.js" defer></script>
+<script src="./js/darkfish.js" defer></script>
+
+<link href="./css/fonts.css" rel="stylesheet">
+<link href="./css/rdoc.css" rel="stylesheet">
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="./index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="./table_of_contents.html#pages">Pages</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    
+<div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  <p class="link">Object
+</div>
+
+    
+    
+    
+<!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    <li ><a href="#method-c-new">::new</a>
+    <li ><a href="#method-i-add_student">#add_student</a>
+    <li ><a href="#method-i-delete_student_by_id">#delete_student_by_id</a>
+    <li ><a href="#method-i-get_k_n_student_short_list">#get_k_n_student_short_list</a>
+    <li ><a href="#method-i-get_student_by_id">#get_student_by_id</a>
+    <li ><a href="#method-i-get_student_short_count">#get_student_short_count</a>
+    <li ><a href="#method-i-read_file">#read_file</a>
+    <li ><a href="#method-i-replace_student_by_id">#replace_student_by_id</a>
+    <li ><a href="#method-i-sort_by_surname_initials-21">#sort_by_surname_initials!</a>
+    <li ><a href="#method-i-unique">#unique</a>
+    <li ><a href="#method-i-write_file">#write_file</a>
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-StudentsListJSON">
+  <h1 id="class-StudentsListJSON" class="class">
+    class StudentsListJSON
+  </h1>
+
+  <section class="description">
+    
+<p>Класс для работы со списком студентов, хранящимся в JSON-файле</p>
+
+  </section>
+
+  <section id="5Buntitled-5D" class="documentation-section">
+
+
+
+
+
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+      <div id="method-c-new" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">new</span><span
+              class="method-args">(file)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>Инициализация списка студентов @param file [String] путь к JSON-файлу со студентами</p>
+
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File student_list_JSON.rb, line 15</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">initialize</span>(<span class="ruby-identifier">file</span>)
+  <span class="ruby-ivar">@file</span> = <span class="ruby-identifier">file</span>
+  <span class="ruby-ivar">@students</span> = []
+  <span class="ruby-identifier">read_file</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+    </section>
+
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+      <div id="method-i-add_student" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">add_student</span><span
+              class="method-args">(student)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>Добавляет нового студента в список @param student [Student] объект студента @raise [DuplicateStudentError] если студент не уникален @return [void]</p>
+
+          <div class="method-source-code" id="add_student-source">
+            <pre><span class="ruby-comment"># File student_list_JSON.rb, line 90</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">add_student</span>(<span class="ruby-identifier">student</span>)
+  <span class="ruby-identifier">unique</span>(<span class="ruby-identifier">student</span>)
+  <span class="ruby-identifier">max_id</span> = <span class="ruby-ivar">@students</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:id</span>).<span class="ruby-identifier">max</span> <span class="ruby-operator">||</span> <span class="ruby-value">0</span>
+  <span class="ruby-ivar">@students</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Student</span>.<span class="ruby-identifier">from_h</span>(<span class="ruby-value">id:</span> <span class="ruby-identifier">max_id</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>, <span class="ruby-value">hash:</span> <span class="ruby-identifier">student</span>.<span class="ruby-identifier">to_h</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-delete_student_by_id" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">delete_student_by_id</span><span
+              class="method-args">(id)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>Удаляет студента по id @param id [Integer] идентификатор студента @return [void]</p>
+
+          <div class="method-source-code" id="delete_student_by_id-source">
+            <pre><span class="ruby-comment"># File student_list_JSON.rb, line 111</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">delete_student_by_id</span>(<span class="ruby-identifier">id</span>)
+  <span class="ruby-ivar">@students</span>.<span class="ruby-identifier">reject!</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">id</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">id</span> }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-get_k_n_student_short_list" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">get_k_n_student_short_list</span><span
+              class="method-args">(k, n, data_list = nil)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>Возвращает список краткой информации о студентах @param k [Integer] количество студентов на странице @param n [Integer] номер страницы @param data_list [DataListStudentShort, nil] объект для заполнения @return [DataListStudentShort]</p>
+
+          <div class="method-source-code" id="get_k_n_student_short_list-source">
+            <pre><span class="ruby-comment"># File student_list_JSON.rb, line 48</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">get_k_n_student_short_list</span>(<span class="ruby-identifier">k</span>, <span class="ruby-identifier">n</span>, <span class="ruby-identifier">data_list</span> = <span class="ruby-keyword">nil</span>)
+  <span class="ruby-identifier">start_index</span> = (<span class="ruby-identifier">n</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>) <span class="ruby-operator">*</span> <span class="ruby-identifier">k</span>
+  <span class="ruby-identifier">slice</span> = <span class="ruby-ivar">@students</span>[<span class="ruby-identifier">start_index</span>, <span class="ruby-identifier">k</span>] <span class="ruby-operator">||</span> []
+
+  <span class="ruby-identifier">student_shorts</span> = <span class="ruby-identifier">slice</span>.<span class="ruby-identifier">map</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
+    <span class="ruby-constant">StudentShort</span>.<span class="ruby-identifier">new</span>(
+      <span class="ruby-value">id:</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">id</span>,
+      <span class="ruby-value">last_name_initials:</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">last_name_initials</span>,
+      <span class="ruby-value">contact:</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">contact</span>,
+      <span class="ruby-value">git:</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">git</span>
+    )
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">data_list</span>
+    <span class="ruby-identifier">data_list</span>.<span class="ruby-identifier">data</span> = <span class="ruby-identifier">student_shorts</span>
+    <span class="ruby-identifier">data_list</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-constant">DataListStudentShort</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">student_shorts</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-get_student_by_id" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">get_student_by_id</span><span
+              class="method-args">(id)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>Возвращает студента по его идентификатору @param id [Integer] идентификатор студента @return [Student, nil] найденный студент или nil</p>
+
+          <div class="method-source-code" id="get_student_by_id-source">
+            <pre><span class="ruby-comment"># File student_list_JSON.rb, line 39</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">get_student_by_id</span>(<span class="ruby-identifier">id</span>)
+  <span class="ruby-ivar">@students</span>.<span class="ruby-identifier">find</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">id</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">id</span> }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-get_student_short_count" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">get_student_short_count</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>Возвращает количество студентов @return [Integer]</p>
+
+          <div class="method-source-code" id="get_student_short_count-source">
+            <pre><span class="ruby-comment"># File student_list_JSON.rb, line 117</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">get_student_short_count</span>
+  <span class="ruby-ivar">@students</span>.<span class="ruby-identifier">size</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-read_file" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">read_file</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>Считывает список студентов из JSON-файла @return [Array&lt;Student&gt;] массив студентов</p>
+
+          <div class="method-source-code" id="read_file-source">
+            <pre><span class="ruby-comment"># File student_list_JSON.rb, line 23</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">read_file</span>
+  <span class="ruby-identifier">json</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-ivar">@file</span>)
+  <span class="ruby-identifier">data</span> = <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">json</span>, <span class="ruby-value">symbolize_names:</span> <span class="ruby-keyword">true</span>)
+  <span class="ruby-ivar">@students</span> = <span class="ruby-identifier">data</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">h</span><span class="ruby-operator">|</span> <span class="ruby-constant">Student</span>.<span class="ruby-identifier">from_h</span>(<span class="ruby-value">id:</span> <span class="ruby-identifier">h</span>[<span class="ruby-value">:id</span>], <span class="ruby-value">hash:</span> <span class="ruby-identifier">h</span>) }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-replace_student_by_id" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">replace_student_by_id</span><span
+              class="method-args">(id, new_student)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>Заменяет данные студента по id @param id [Integer] идентификатор студента @param new_student [Student] новые данные студента @raise [DuplicateStudentError] если нарушена уникальность @return [void]</p>
+
+          <div class="method-source-code" id="replace_student_by_id-source">
+            <pre><span class="ruby-comment"># File student_list_JSON.rb, line 101</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">replace_student_by_id</span>(<span class="ruby-identifier">id</span>, <span class="ruby-identifier">new_student</span>)
+  <span class="ruby-identifier">unique</span>(<span class="ruby-identifier">new_student</span>, <span class="ruby-value">ignore_id:</span> <span class="ruby-identifier">id</span>)
+  <span class="ruby-identifier">index</span> = <span class="ruby-ivar">@students</span>.<span class="ruby-identifier">index</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">id</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">id</span> }
+  <span class="ruby-keyword">return</span> <span class="ruby-keyword">unless</span> <span class="ruby-identifier">index</span>
+  <span class="ruby-ivar">@students</span>[<span class="ruby-identifier">index</span>] = <span class="ruby-constant">Student</span>.<span class="ruby-identifier">from_h</span>(<span class="ruby-value">id:</span> <span class="ruby-identifier">id</span>, <span class="ruby-value">hash:</span> <span class="ruby-identifier">new_student</span>.<span class="ruby-identifier">to_h</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-sort_by_surname_initials-21" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">sort_by_surname_initials!</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>Сортирует список студентов по фамилии и инициалам @return [void]</p>
+
+          <div class="method-source-code" id="sort_by_surname_initials-21-source">
+            <pre><span class="ruby-comment"># File student_list_JSON.rb, line 71</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">sort_by_surname_initials!</span>
+  <span class="ruby-ivar">@students</span>.<span class="ruby-identifier">sort_by!</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:last_name_initials</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-unique" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">unique</span><span
+              class="method-args">(student, ignore_id: nil)</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>Проверяет уникальность студента по контактным данным @param student [Student] проверяемый студент @param ignore_id [Integer, nil] id студента, который следует игнорировать @raise [DuplicateStudentError] если найден дубликат @return [void]</p>
+
+          <div class="method-source-code" id="unique-source">
+            <pre><span class="ruby-comment"># File student_list_JSON.rb, line 80</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">unique</span>(<span class="ruby-identifier">student</span>, <span class="ruby-value">ignore_id:</span> <span class="ruby-keyword">nil</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@students</span>.<span class="ruby-identifier">any?</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">id</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">ignore_id</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">s</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">student</span> }
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">DuplicateStudentError</span>, <span class="ruby-string">&#39;Студент с таким контактом уже существует&#39;</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-write_file" class="method-detail ">
+        <div class="method-header">
+          <div class="method-heading">
+            <span class="method-name">write_file</span><span
+              class="method-args">()</span>
+            <span class="method-click-advice">click to toggle source</span>
+          </div>
+        </div>
+
+        <div class="method-description">
+          <p>Записывает текущий список студентов в JSON-файл @return [void]</p>
+
+          <div class="method-source-code" id="write_file-source">
+            <pre><span class="ruby-comment"># File student_list_JSON.rb, line 31</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">write_file</span>
+  <span class="ruby-identifier">data</span> = <span class="ruby-ivar">@students</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:to_h</span>)
+  <span class="ruby-constant">File</span>.<span class="ruby-identifier">write</span>(<span class="ruby-ivar">@file</span>, <span class="ruby-constant">JSON</span>.<span class="ruby-identifier">pretty_generate</span>(<span class="ruby-identifier">data</span>))
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+    </section>
+
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="https://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="https://ruby.github.io/rdoc/">RDoc</a> 6.5.0.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

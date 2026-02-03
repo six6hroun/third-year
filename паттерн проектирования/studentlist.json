@@ -1,0 +1,86 @@
+[
+  {
+    "id": 1,
+    "last_name": "Иванов",
+    "first_name": "Иван",
+    "patronymic": "Петрович",
+    "phone": "+79161234567",
+    "telegram": "@ivan_smirnov",
+    "email": "ivan@example.com",
+    "git": "https://github.com/ivan"
+  },
+  {
+    "id": 2,
+    "last_name": "Петрова",
+    "first_name": "Анна",
+    "patronymic": "Сергеевна",
+    "phone": "+79261234568",
+    "email": "anna@example.com",
+    "git": "https://github.com/anna"
+  },
+  {
+    "id": 3,
+    "last_name": "Сидоров",
+    "first_name": "Алексей",
+    "telegram": "@alex_sidorov",
+    "git": "https://github.com/alex"
+  },
+  {
+    "id": 4,
+    "last_name": "Кузнецова",
+    "first_name": "Мария",
+    "patronymic": "Андреевна",
+    "phone": "+79361234569",
+    "email": "maria@example.com"
+  },
+  {
+    "id": 5,
+    "last_name": "Смирнов",
+    "first_name": "Дмитрий",
+    "git": "https://github.com/dmitry"
+  },
+  {
+    "id": 6,
+    "last_name": "Новикова",
+    "first_name": "Елена",
+    "patronymic": "Игоревна",
+    "telegram": "@elena_nov",
+    "email": "elena@example.ru"
+  },
+  {
+    "id": 7,
+    "last_name": "Федоров",
+    "first_name": "Сергей",
+    "phone": "+79461234570"
+  },
+  {
+    "id": 8,
+    "last_name": "Васильева",
+    "first_name": "Ольга",
+    "patronymic": "Дмитриевна",
+    "telegram": "@olga_vas",
+    "email": "olga@test.com",
+    "git": "https://github.com/olga"
+  },
+  {
+    "id": 9,
+    "last_name": "Алексеев",
+    "first_name": "Павел",
+    "email": "pavel@mail.ru"
+  },
+  {
+    "id": 10,
+    "last_name": "Николаев",
+    "first_name": "Константин",
+    "patronymic": "Викторович",
+    "git": "https://github.com/kostya"
+  },
+  {
+    "id": 11,
+    "last_name": "Иванов",
+    "first_name": "Иван",
+    "phone": "+79990001125",
+    "telegram": "@ivannko",
+    "email": "sus@example.com"
+  }
+]

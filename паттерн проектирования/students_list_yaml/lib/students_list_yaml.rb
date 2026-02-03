@@ -1,0 +1,8 @@
+require_relative "students_list_yaml/version"
+require_relative "students_list_yaml/student"
+require_relative "students_list_yaml/student_short"
+require_relative "students_list_yaml/parent_student"
+require_relative "students_list_yaml/data_list"
+require_relative "students_list_yaml/data_list_student_short"
+require_relative "students_list_yaml/data_table"
+require_relative "students_list_yaml/students_list_yaml"
