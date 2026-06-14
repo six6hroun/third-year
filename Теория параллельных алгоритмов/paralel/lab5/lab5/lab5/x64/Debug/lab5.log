@@ -1,0 +1,4 @@
+﻿  lab5.cpp
+C:\pocame\Visual Studio 2022\paralel\lab5\lab5\lab5.cpp(9,17): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\pocame\Visual Studio 2022\paralel\lab5\lab5\lab5.cpp(60,11): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  lab5.vcxproj -> C:\pocame\Visual Studio 2022\paralel\lab5\lab5\x64\Debug\lab5.exe
