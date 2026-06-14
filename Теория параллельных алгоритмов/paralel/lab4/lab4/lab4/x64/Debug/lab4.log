@@ -1,0 +1,6 @@
+﻿  lab4.cpp
+C:\pocame\Visual Studio 2022\paralel\lab4\lab4\lab4.cpp(11,11): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\pocame\Visual Studio 2022\paralel\lab4\lab4\lab4.cpp(22,11): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\pocame\Visual Studio 2022\paralel\lab4\lab4\lab4.cpp(45,11): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\pocame\Visual Studio 2022\paralel\lab4\lab4\lab4.cpp(59,11): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  lab4.vcxproj -> C:\pocame\Visual Studio 2022\paralel\lab4\lab4\x64\Debug\lab4.exe
