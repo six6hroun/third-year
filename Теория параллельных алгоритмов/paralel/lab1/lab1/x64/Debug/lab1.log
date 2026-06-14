@@ -1,0 +1,6 @@
+﻿  lab1.cpp
+C:\pocame\Visual Studio 2022\paralel\lab1\lab1.cpp(12,11): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\pocame\Visual Studio 2022\paralel\lab1\lab1.cpp(29,11): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\pocame\Visual Studio 2022\paralel\lab1\lab1.cpp(56,11): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\pocame\Visual Studio 2022\paralel\lab1\lab1.cpp(64,21): warning C4849: Предложение "collapse" OpenMP игнорируется в директиве "for".
+  lab1.vcxproj -> C:\pocame\Visual Studio 2022\paralel\lab1\x64\Debug\lab1.exe
