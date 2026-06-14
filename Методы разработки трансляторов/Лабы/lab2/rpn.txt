@@ -1,0 +1,1 @@
+a 15 = b 4.1 = result 0 = sum a b + = diff a b - = mult a b * = b 0 != M1 УПЛ div a b / = M2 БП M1: div 0 = M2: remainder a b % = negative a u- = result result sum + = result result diff * = 0 return
