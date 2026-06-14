@@ -1,0 +1,5 @@
+﻿  ConsoleApplication1.cpp
+C:\pocame\Visual Studio 2022\paralel\lab2\ConsoleApplication1\ConsoleApplication1.cpp(14,11): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\pocame\Visual Studio 2022\paralel\lab2\ConsoleApplication1\ConsoleApplication1.cpp(47,11): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\pocame\Visual Studio 2022\paralel\lab2\ConsoleApplication1\ConsoleApplication1.cpp(101,11): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  ConsoleApplication1.vcxproj -> C:\pocame\Visual Studio 2022\paralel\lab2\ConsoleApplication1\x64\Debug\ConsoleApplication1.exe
