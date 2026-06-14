@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Градиентный спуск</title>
+    <style>
+        body { margin: 0; overflow: hidden; font-family: Arial, sans-serif; }
+        .panel {
+            position: absolute;
+            background: white;
+            border: 1px solid #ccc;
+            padding: 15px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+            font-size: 14px;
+            z-index: 100;
+        }
+        #controls { top: 10px; left: 10px; width: 220px; }
+        #info { top: 10px; right: 10px; width: 180px; }
+        #chart-container { bottom: 10px; right: 10px; width: 300px; height: 180px; }
+
+        .param-group {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .param-group h4 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        .param-row {
+            margin: 8px 0;
+        }
+        .param-row label {
+            display: block;
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+        select, input, button {
+            width: 100%;
+            padding: 6px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        button:hover { background: #45a049; }
+
+        .info-row { margin: 8px 0; }
+        .label { color: #666; }
+        .value { float: right; font-weight: bold; color: #4CAF50; }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <div id="controls" class="panel">
+        <div class="param-group">
+            <h4>Целевая функция</h4>
+            <div class="param-row">
+                <label>Функция:</label>
+                <select id="function-select">
+                    <option value="1" selected>f₁ = x⁴ - 2x²y + x² + y² + 2y + 1</option>
+                    <option value="2">f₂ = x² + y²</option>
+                    <option value="3">f₃ = (x² - y²)²</option>
+                    <option value="4">f₄ = x⁴ + y⁴ - 2x² + 2y²</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="param-group">
+            <h4>Начальное приближение</h4>
+            <div class="param-row">
+                <label>X₀:</label>
+                <input type="number" id="start-x" value="0.5" step="0.1" min="-2" max="2">
+            </div>
+            <div class="param-row">
+                <label>Y₀:</label>
+                <input type="number" id="start-y" value="1.0" step="0.1" min="-2" max="2">
+            </div>
+        </div>
+
+        <div class="param-group">
+            <h4>Параметры спуска</h4>
+            <div class="param-row">
+                <label>Скорость обучения α:</label>
+                <input type="number" id="learning-rate" value="0.02" step="0.005" min="0.001" max="0.1">
+            </div>
+            <div class="param-row">
+                <label>Макс. итераций:</label>
+                <input type="number" id="max-iter" value="50" step="10" min="10" max="200">
+            </div>
+        </div>
+
+        <button id="start-btn">Запустить спуск</button>
+    </div>
+
+    <div id="info" class="panel">
+        <h4 style="margin:0 0 10px 0;">Результаты</h4>
+        <div class="info-row"><span class="label">Итераций:</span> <span id="iter-count" class="value">0</span></div>
+        <div class="info-row"><span class="label">Начало:</span> <span id="start-point" class="value">(0.5, 1.0)</span></div>
+        <div class="info-row"><span class="label">Финиш:</span> <span id="final-point" class="value">---</span></div>
+        <div class="info-row"><span class="label">Значение:</span> <span id="final-value" class="value">---</span></div>
+    </div>
+
+    <div id="chart-container" class="panel">
+        <canvas id="chart"></canvas>
+    </div>
+
+    <script>
+        const functions = {
+            1: {
+                func: (x,y)=>Math.pow(x,4)-2*x*x*y+x*x+y*y+2*y+1,
+                grad: (x,y)=>[4*x*x*x-4*x*y+2*x, -2*x*x+2*y+2],
+                range: 2.0
+            },
+            2: {
+                func: (x,y)=>x*x+y*y,
+                grad: (x,y)=>[2*x,2*y],
+                range: 2.0
+            },
+            3: {
+                func: (x,y)=>Math.pow(x*x-y*y,2),
+                grad: (x,y)=>[4*x*(x*x-y*y), -4*y*(x*x-y*y)],
+                range: 1.5
+            },
+            4: {
+                func: (x,y)=>Math.pow(x,4)+Math.pow(y,4)-2*x*x+2*y*y,
+                grad: (x,y)=>[4*x*x*x-4*x, 4*y*y*y+4*y],
+                range: 1.8
+            }
+        };
+
+        let scene, camera, renderer, controls, surface, trajectoryLine, startSphere, finalStar, pointSpheres=[], chart;
+        let currentFunc = functions[1];
+
+        function gradientDescent(startX, startY, lr, maxIter) {
+            let hist = [{x:startX, y:startY, z:currentFunc.func(startX,startY)}];
+            let x=startX, y=startY;
+            for(let i=0; i<maxIter; i++) {
+                const [dfdx, dfdy] = currentFunc.grad(x,y);
+                if(Math.sqrt(dfdx*dfdx+dfdy*dfdy)<1e-6) break;
+                x -= lr*dfdx;
+                y -= lr*dfdy;
+                hist.push({x, y, z:currentFunc.func(x,y)});
+            }
+            return hist;
+        }
+
+        function initScene() {
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xffffff);
+
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
+            camera.position.set(3, 2, 5);
+            camera.lookAt(0, 0, 0);
+
+            renderer = new THREE.WebGLRenderer({antialias:true});
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0xffffff);
+            document.body.appendChild(renderer.domElement);
+
+            const ambient = new THREE.AmbientLight(0x606060);
+            scene.add(ambient);
+
+            const light1 = new THREE.DirectionalLight(0xffffff, 1);
+            light1.position.set(2, 5, 3);
+            scene.add(light1);
+
+            const light2 = new THREE.DirectionalLight(0xffaa88, 0.6);
+            light2.position.set(-2, 3, -2);
+            scene.add(light2);
+
+            const gridHelper = new THREE.GridHelper(5, 20, 0x336699, 0x99ccff);
+            gridHelper.position.y = 0;
+            scene.add(gridHelper);
+
+            const axesHelper = new THREE.AxesHelper(3);
+            scene.add(axesHelper);
+
+            const originSphere = new THREE.Mesh(
+                new THREE.SphereGeometry(0.05),
+                new THREE.MeshBasicMaterial({color: 0x000000})
+            );
+            originSphere.position.set(0, 0, 0);
+            scene.add(originSphere);
+
+            trajectoryLine = new THREE.Line(
+                new THREE.BufferGeometry(),
+                new THREE.LineBasicMaterial({color:0xff6600})
+            );
+            scene.add(trajectoryLine);
+
+            startSphere = new THREE.Mesh(
+                new THREE.SphereGeometry(0.1),
+                new THREE.MeshStandardMaterial({color:0xff3333})
+            );
+            scene.add(startSphere);
+
+            finalStar = new THREE.Mesh(
+                new THREE.SphereGeometry(0.12),
+                new THREE.MeshStandardMaterial({color:0x33ff33})
+            );
+            scene.add(finalStar);
+
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js';
+            script.onload = () => {
+                controls = new THREE.OrbitControls(camera, renderer.domElement);
+                controls.enableDamping = true;
+                controls.dampingFactor = 0.05;
+                controls.target.set(0, 0, 0);
+                controls.up.set(0, 1, 0);
+            };
+            document.head.appendChild(script);
+        }
+
+        function createSurface() {
+            if(surface) scene.remove(surface);
+
+            const size = currentFunc.range * 2;
+            const seg = 50;
+            const vertices = [];
+            const indices = [];
+            const colors = [];
+
+            let minY = Infinity, maxY = -Infinity;
+            const yValues = [];
+
+            for(let i=0; i<=seg; i++) {
+                const x = -size/2 + (i/seg)*size;
+                for(let j=0; j<=seg; j++) {
+                    const z = -size/2 + (j/seg)*size;
+                    const y = currentFunc.func(x, z);
+                    yValues.push(y);
+                    if(y < minY) minY = y;
+                    if(y > maxY) maxY = y;
+                }
+            }
+
+            let idx = 0;
+            for(let i=0; i<=seg; i++) {
+                const x = -size/2 + (i/seg)*size;
+                for(let j=0; j<=seg; j++) {
+                    const z = -size/2 + (j/seg)*size;
+                    const y = yValues[idx++];
+
+                    vertices.push(x, y, z);
+
+                    const t = (y - minY) / (maxY - minY);
+                    colors.push(0.2 + t*0.8, 0.2, 0.8 - t*0.6);
+                }
+            }
+
+            for(let i=0; i<seg; i++) {
+                for(let j=0; j<seg; j++) {
+                    const a = i*(seg+1)+j;
+                    const b = i*(seg+1)+j+1;
+                    const c = (i+1)*(seg+1)+j;
+                    const d = (i+1)*(seg+1)+j+1;
+                    indices.push(a, b, c);
+                    indices.push(b, d, c);
+                }
+            }
+
+            const geom = new THREE.BufferGeometry();
+            geom.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geom.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+            geom.setIndex(indices);
+            geom.computeVertexNormals();
+
+            surface = new THREE.Mesh(
+                geom,
+                new THREE.MeshPhongMaterial({
+                    vertexColors: true,
+                    side: THREE.DoubleSide,
+                    transparent: true,
+                    opacity: 0.7
+                })
+            );
+            scene.add(surface);
+        }
+
+        function updateTrajectory(history) {
+            pointSpheres.forEach(s=>scene.remove(s));
+            pointSpheres = [];
+
+            const points = history.map(p=>new THREE.Vector3(p.x, p.z, p.y));
+
+            trajectoryLine.geometry.dispose();
+            trajectoryLine.geometry = new THREE.BufferGeometry().setFromPoints(points);
+
+            history.forEach((p,i)=>{
+                if(i===0 || i===history.length-1) return;
+                const sphere = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.05),
+                    new THREE.MeshStandardMaterial({color:0xff9900})
+                );
+                sphere.position.set(p.x, p.z, p.y);
+                scene.add(sphere);
+                pointSpheres.push(sphere);
+            });
+
+            if(history.length>0) {
+                startSphere.position.set(history[0].x, history[0].z, history[0].y);
+                finalStar.position.set(history[history.length-1].x, history[history.length-1].z, history[history.length-1].y);
+            }
+        }
+
+        function run() {
+            const funcId = document.getElementById('function-select').value;
+            currentFunc = functions[funcId];
+
+            const startX = parseFloat(document.getElementById('start-x').value);
+            const startY = parseFloat(document.getElementById('start-y').value);
+            const lr = parseFloat(document.getElementById('learning-rate').value);
+            const maxIter = parseInt(document.getElementById('max-iter').value);
+
+            document.getElementById('start-point').textContent = `(${startX.toFixed(2)}, ${startY.toFixed(2)})`;
+
+            const history = gradientDescent(startX, startY, lr, maxIter);
+            const last = history[history.length-1];
+
+            document.getElementById('iter-count').textContent = history.length-1;
+            document.getElementById('final-point').textContent = `(${last.x.toFixed(3)}, ${last.y.toFixed(3)})`;
+            document.getElementById('final-value').textContent = last.z.toFixed(4);
+
+            if(chart) chart.destroy();
+            chart = new Chart(document.getElementById('chart'), {
+                type:'line',
+                data: {
+                    labels: history.map((_,i)=>i),
+                    datasets: [{
+                        data: history.map(p=>p.z),
+                        borderColor:'#4CAF50',
+                        borderWidth:2,
+                        pointRadius:1,
+                        fill:false,
+                        label: 'f(x,y)'
+                    }]
+                },
+                options: {
+                    responsive:true,
+                    maintainAspectRatio:false,
+                    animation:false,
+                    scales: {
+                        y: {
+                            grid:{color:'#eee'},
+                            ticks:{color:'#666'},
+                            title: { display: true, text: 'f(x,y)' }
+                        },
+                        x: {
+                            grid:{color:'#eee'},
+                            ticks:{color:'#666'},
+                            title: { display: true, text: 'Итерация' }
+                        }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            createSurface();
+            updateTrajectory(history);
+        }
+
+        window.addEventListener('load', ()=>{
+            initScene();
+            run();
+            document.getElementById('start-btn').addEventListener('click', run);
+
+            function animate() {
+                requestAnimationFrame(animate);
+                if(controls) controls.update();
+                if(renderer && scene && camera) renderer.render(scene, camera);
+            }
+            animate();
+        });
+
+        window.addEventListener('resize', ()=>{
+            if(camera) {
+                camera.aspect = window.innerWidth/window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+        });
+    </script>
+</body>
+</html>
