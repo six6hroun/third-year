@@ -1,0 +1,24 @@
+int main() {
+    int a = 15;
+    int b = 4.1;
+    int result = 0;
+
+    int sum = a + b;
+    int diff = a - b;
+    int mult = a * b;
+    int div;
+
+    if (b != 0) {
+        div = a / b;
+    } else {
+        div = 0;
+    }
+
+    int remainder = a % b;
+    int negative = -a;
+
+    result += sum;
+    result *= diff;
+
+    return 0;
+}
