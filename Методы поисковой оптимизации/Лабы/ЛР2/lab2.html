@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ЛР2 — Квадратичное программирование</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .panel {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            backdrop-filter: blur(5px);
+            z-index: 100;
+        }
+        
+        #controls {
+            top: 20px;
+            left: 20px;
+            width: 280px;
+        }
+        
+        #info {
+            top: 20px;
+            right: 20px;
+            width: 220px;
+        }
+        
+        #chartBox {
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            height: 220px;
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        h3, h4 {
+            margin: 0 0 12px 0;
+            color: #333;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 5px;
+        }
+        
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: 600;
+            color: #555;
+            font-size: 0.9em;
+        }
+        
+        input, select, button {
+            width: 100%;
+            margin: 4px 0 8px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+        }
+        
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 15px;
+            padding: 10px;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #3f8f42;
+        }
+        
+        #info div {
+            margin: 8px 0;
+            font-size: 14px;
+            color: #444;
+        }
+        
+        #info span {
+            font-weight: 600;
+            color: #4CAF50;
+        }
+        
+        #status {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            z-index: 100;
+        }
+    </style>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div id="controls" class="panel">
+        <h3>Квадратичное программирование</h3>
+
+        <label>Задача:</label>
+        <select id="task">
+            <option value="1">min 2x₁² + 3x₂² + 4x₁x₂ - 6x₁ - 3x₂</option>
+            <option value="2">max x₁ + 2x₂ - x₂²</option>
+        </select>
+
+        <label>X₁ начальное:</label>
+        <input type="number" id="startX" value="0.2" step="0.05" min="0" max="2">
+
+        <label>X₂ начальное:</label>
+        <input type="number" id="startY" value="0.2" step="0.05" min="0" max="2">
+
+        <label>Скорость обучения α:</label>
+        <input type="number" id="alpha" value="0.1" step="0.01" min="0.01" max="0.5">
+
+        <label>Макс. итераций:</label>
+        <input type="number" id="iterMax" value="50" min="10" max="200">
+
+        <label>Точность ε:</label>
+        <input type="number" id="epsilon" value="1e-6" step="1e-7" style="font-size: 12px;">
+
+        <button id="runBtn">Запустить оптимизацию</button>
+    </div>
+
+    <div id="info" class="panel">
+        <h4>Результаты</h4>
+        <div>Итераций: <span id="iter">0</span></div>
+        <div>Финальная точка: <span id="point">(0.000, 0.000)</span></div>
+        <div>F(x): <span id="value">0.000</span></div>
+        <div>Тип задачи: <span id="optType">минимизация</span></div>
+    </div>
+
+    <div id="chartBox" class="panel">
+        <canvas id="chart"></canvas>
+    </div>
+    
+    <div id="status">Three.js | Проекция градиента</div>
+
+    <script src="lab2.js"></script>
+</body>
+</html>
