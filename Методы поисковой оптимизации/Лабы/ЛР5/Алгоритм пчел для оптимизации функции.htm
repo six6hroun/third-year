@@ -1,0 +1,917 @@
+﻿<!DOCTYPE html>
+<title>Алгоритм пчел для оптимизации функции | jenyay.net</title>
+	<script src="./Алгоритм пчел для оптимизации функции_files/openapi.js" type="text/javascript"></script>
+	<!--HTMLHeader--><style type="text/css"><!--
+  ul, ol, pre, dl, p { margin-top:0px; margin-bottom:0px; }
+  code.escaped { white-space: nowrap; }
+  .vspace { margin-top:1.33em; }
+  .indent { margin-left:40px; }
+  .outdent { margin-left:40px; text-indent:-40px; }
+  a.createlinktext { text-decoration:none; border-bottom:1px dotted gray; }
+  a.createlink { text-decoration:none; position:relative; top:-0.5em;
+    font-weight:bold; font-size:smaller; border-bottom:none; }
+  img { border:0px; }
+  
+  .rtl, .rtl * {direction:rtl; unicode-bidi:bidi-override;}
+  .ltr, .ltr * {direction:ltr; unicode-bidi:bidi-override;}
+  .rtl .indent, .rtl.indent, .rtl .outdent, .rtl.outdent {
+    margin-left:0; margin-right: 40px;
+  }
+  
+div.tabledit {text-align:right;font-size:smaller;}
+.editconflict { color:green; 
+  font-style:italic; margin-top:1.33em; margin-bottom:1.33em; }
+
+  table.markup { border:2px dotted #ccf; width:90%; }
+  td.markup1, td.markup2 { padding-left:10px; padding-right:10px; }
+  table.vert td.markup1 { border-bottom:1px solid #ccf; }
+  table.horiz td.markup1 { width:23em; border-right:1px solid #ccf; }
+  table.markup caption { text-align:left; }
+  div.faq p, div.faq pre { margin-left:2em; }
+  div.faq p.question { margin:1em 0 0.75em 0; font-weight:bold; }
+  div.faqtoc div.faq * { display:none; }
+  div.faqtoc div.faq p.question 
+    { display:block; font-weight:normal; margin:0.5em 0 0.5em 20px; line-height:normal; }
+  div.faqtoc div.faq p.question * { display:inline; }
+  td.markup1 pre { white-space: pre-wrap; }
+   
+    .frame 
+      { border:1px solid #cccccc; padding:4px; background-color:#f9f9f9; }
+    .lfloat { float:left; margin-right:0.5em; }
+    .rfloat { float:right; margin-left:0.5em; }
+a.varlink { text-decoration:none;}
+
+.sourceblocklink {
+  text-align: right;
+  font-size: smaller;
+}
+.sourceblocktext {
+  padding: 0.5em;
+  border: 1px solid #808080;
+  color: #000000;
+  background-color: #f1f0ed;
+}
+.sourceblocktext div {
+  font-family: monospace;
+  font-size: small;
+  line-height: 1;
+  height: 1%;
+}
+.sourceblocktext div.head,
+.sourceblocktext div.foot {
+  font: italic medium serif;
+  padding: 0.5em;
+}
+/**
+ * GeSHi Dynamically Generated Stylesheet
+ * --------------------------------------
+ * Dynamically generated stylesheet for python
+ * CSS class: , CSS id: 
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2014 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ * --------------------------------------
+ */
+.python .de1, .python .de2 {font-family: monospace; font-weight: normal;}
+.python  {font-family:monospace;}
+.python .imp {font-weight: bold; color: red;}
+.python li, .python .li1 {font-family: monospace; color: black; font-weight: normal;}
+.python .ln {width:1px;text-align:right;margin:0;padding:0 2px;vertical-align:top;}
+.python .li2 {font-weight: bold;}
+.python .kw1 {color: #ff7700;font-weight:bold;}
+.python .kw2 {color: #008000;}
+.python .kw3 {color: #dc143c;}
+.python .kw4 {color: #0000cd;}
+.python .co1 {color: #808080; font-style: italic;}
+.python .coMULTI {color: #808080; font-style: italic;}
+.python .es0 {color: #000099; font-weight: bold;}
+.python .br0 {color: black;}
+.python .sy0 {color: #66cc66;}
+.python .st0 {color: #483d8b;}
+.python .nu0 {color: #ff4500;}
+.python .me1 {color: black;}
+.python .ln-xtra, .python li.ln-xtra, .python div.ln-xtra {background-color: #ffc;}
+.python span.xtra { display:block; }
+
+--></style><link rel="stylesheet" type="text/css" href="./Алгоритм пчел для оптимизации функции_files/fox.css" media="screen">
+<script language="javascript" type="text/javascript" src="./Алгоритм пчел для оптимизации функции_files/guiedit.js"></script>
+<link rel="alternate" title="Софт, исходники и фото" href="https://jenyay.net/blog/feed/" type="application/rss+xml">  <meta name="robots" content="index,follow">
+<meta name="keywords" content="скрипты, python, исходники, программирование, алгоритм роя пчел, минимизация функции, оптимизация функции">
+<meta name="description" content="Реализация алгоритма пчел для оптимизации функции на языке Python">
+
+</head>
+<body>
+	<div id="wrapper">
+		<header id="main_header">
+			<div id="site_headers">
+				<h1><a 	</div>
+
+			<div id="search">
+				<form action="https://jenyay.net/">
+			    <input type="hidden" name="n" value="Programming.Bees">
+			    </form>
+			</div>
+		</header>
+		<div id="content_top_menu">
+			<nav id="nav" class="shadow">
+														<header>
+						<h1 class="pagetitle">Алгоритм пчел для оптимизации функции</h1>
+					</header>
+					<!--PageText-->
+<div id="wikitext">
+<p class="vspace" style="text-align: center;"><!-- labirint.ru --></p>
+<p>Алгоритм пчел (в англоязычных статьях так же встречаются названия Artificial Bee Colony Algorithm и Bees Algorithm) является довольно молодым алгоритмом для нахождения глобальных экстремумов (максимумов или минимумов) сложных многомерных функций (будем называть эту функцию целевой функцией). Первые статьи, которые удалось найти в интернете, датируются 2005 годом ([1] и [2]). Кроме того, например, в [3] тоже довольно хорошо описана суть этого алгоритма, приведено сравнение алгоритма пчел с генетическим алгоритмом и алгоритмом, моделирующим поведение муравьев. Там же, в [3], можно найти несколько интересных функций, на которых можно отрабатывать алгоритм.
+</p>
+<p class="vspace">В этой статье мы рассмотрим основные принципы алгоритма и пример его реализации на языке Python.
+</p>
+<p class="vspace"><a name="main" id="main"></a>
+</p><h2>Основные принципы</h2>
+<p>Идея алгоритма взята, как уже можно догадаться из названия, у пчел, а именно из их поведения при поиске мест, где можно раздобыть как можно больше нектара. Сначала из улея вылетают в случайно направлении какое-то количество пчел-разведчиков, которые пытаются отыскать участки, где есть нектар. Через какое-то время пчелы возвращаются в улей и особым образом сообщают остальным где и сколько они нашли нектара. 
+</p>
+<p class="vspace">После этого на найденные участки отправляются другие пчелы, причем чем больше на данном участке предполагается найти нектара, тем больше пчел летит в этом направлении. А разведчики опять улетают искать другие участки, после чего процесс повторяется.
+</p>
+<p class="vspace">А теперь представьте, что расположение глобального экстремума - это участок, где больше всего нектара, причем этот участок единственный, то есть в других местах нектар есть, но меньше. А пчелы живут не на плоскости, где для определения месторасположения участков достаточно знать две координаты, а в многомерном пространстве, где каждая координата представляет собой один параметр функции, которую надо оптимизировать. Найденное количество нектара представляет собой значение целевой функции в этой точке (в случае, если мы ищем глобальный максимум, если мы ищем глобальный минимум, то целевую функцию достаточно умножить на -1). Да, наши "неправильные" пчелы могут собирать и отрицательное количество нектара.
+</p>
+<p class="vspace">Рассмотрим более подробно алгоритм применительно к нахождению экстремумов функции. Далее будем считать, что мы ищем глобальный максимум функции.
+</p>
+<p class="vspace">В алгоритме каждое решение представляется в виде пчелы, которая знает (хранит) расположение (координаты или параметры многомерной функции) какого-то участка поля, где можно добыть нектар.
+</p>
+<p class="vspace">На первом шаге алгоритма в точки, описываемые случайными координатами, отправляется некоторое количество пчел-разведчиков (пусть будет <em>S</em> пчел, от слова scout). В зависимости от значения целевой функции, которое определяется координатами пчелы, выделяются два вида перспективных участков на поверхности функции, вблизи которых возможно располагается глобальный максимум. А именно: 
+</p>
+<div class="vspace"></div><ul><li>Выбирается n лучших участков, где значения целевой функции больше всех
+</li><li>Выбирается m так называемых выбранных участков, где значения целевой функции поменьше, чем на лучших участках, но эти участки все-равно являются неплохими с точки зрения значения целевой функции.
+</li></ul><p class="vspace">Здесь нужно обратить внимание на одну особенность, которая может быть важна при реализации алгоритма. Несколько пчел могут попасть на один и тот же участок (близко друг к другу, размер участка, или возможная близость пчел, задается отдельным параметром). Поэтому можно выделить два варианта поведения: 
+</p>
+<div class="vspace"></div><ul><li>Считать, что эти две пчелы нашли два разных пересекающихся участка, и оба этих участка отметить как лучшие или выбранные.
+</li><li>Считать, что это один участок, центр которого находится в точке, которая соответствует пчеле с большим значением целевой функции. 
+</li></ul><p class="vspace">В реализации, которая будет описана ниже, используется второй вариант поведения, так как он показался менее подверженным застреванию в локальных экстремумах.
+</p>
+<p class="vspace">В окрестность n лучших участков посылается <em>N</em> пчел, а в окрестность <em>m</em> выбранных участков посылается <em>M</em> пчел, причем на каждый из лучших участков должно приходиться больше пчел, чем на каждый из выбранных участков. Можно сделать так, что чем больше значение целевой функции, тем большее количество пчел будет отправляться на соответствующий участок, а можно <em>N</em> и <em>M</em> сделать фиксированными величинами. 
+</p>
+<p class="vspace">Обратите внимания, что пчелы посылаются не в точности на то место, где пчелы-разведчики нашли перспективные и лучшие места, а в их окрестность, более точно координаты определяются случайным образом. Кроме того, окрестность, которая определяет область, в которую может быть послана пчела, можно уменьшать по мере увеличения номера итерации, чтобы постепенно решение сходилось к самому "кончику" экстремума. Но если область уменьшать слишком быстро, то решение может застрять в локальном экстремуме. 
+</p>
+<p class="vspace">После того как пчелы были отправлены на лучшие и выбранные участки, можно отправить тех же пчел-разведчиков на другие случайные точки.
+</p>
+<p class="vspace">После всех этих операций снова находятся <em>n</em> лучших и <em>m</em> выбранных участков, на этот раз среди всех пчел из роя, а не только среди разведчиков, и запоминается самое лучшее место на функции, значение больше которого пока не было найдено, это и будет промежуточным решением.
+</p>
+<p class="vspace">Затем алгоритм повторяется до тех пор пока не сработает какой-нибудь из критериев останова. Критериев останова может быть несколько. Например, если мы знаем значение целевой функции в глобальном экстремуме, то можем повторять алгоритм до тех пор, пока функция не достигнет некоторого значения, близкого к желаемому. Если значение функции в экстремуме неизвестно, то можем повторять шаги алгоритма до тех пор, пока на протяжении какого-то достаточно большого количества итераций найденное решение не будет улучшаться.
+</p>
+<div class="vspace"></div><h3>Пример итерации</h3>
+<p>Давайте рассмотрим небольшой пример. Пусть в качестве целевой функции у нас выступает функция 
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock1">
+  <div class="sourceblocktext"><div>f(x, y) = -(x^2 + y^2)<br></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">Знак "-" в данном случае стоит, чтобы у функции был глобальный максимум, а не минимум. Глобальный (и единственный) максимум этой функции находится в точке (0; 0), причем f(0, 0) = 0.
+</p>
+<p class="vspace">Остальные необходимые параметры:
+</p>
+<p class="vspace">Количество пчел-разведчиков: 10<br>Количество пчел, отправляемых на лучшие участки: 5<br>Количество пчел, отправляемых на другие выбранные участки: 2<br>
+Количество лучших участков: 2<br>Количество выбранных участков: 3<br>
+Размер области для каждого участка: 10
+</p>
+<p class="vspace">Пусть разведчики попали на следующие, участки (список отсортирован по убыванию целевой функции):
+</p>
+<p class="vspace">f(15, 18) = -549<br>f(-30, -15) = -1125<br>f(22, -31) = -1445<br>f(18, 40) = -1924<br>f(-25, 47) = -2834<br>f(60, 86) = -10996<br>f(-91, -99) = -18082<br>f(17, -136) = -18785<br>f(-152, -1) = -22501<br>f(-222, 157) = -73933
+</p>
+<p class="vspace">Сначала будут выбраны 2 лучшие точки:
+</p>
+<p class="vspace">f(15, 18) = -549<br>f(-30, -15) = -1125
+</p>
+<p class="vspace">Затем будут выбраны другие 3 перспективных участка:
+</p>
+<p class="vspace">f(22, -31) = -1445<br>f(18, 40) = -1924<br>f(-25, 47) = -2834
+</p>
+<p class="vspace">В окрестности лучших точек будут отправлены по 5 пчел:
+</p>
+<p class="vspace">Для первой лучшей точки значение координат, которыми ограничивается участок будет:
+</p>
+<p class="vspace">[15 - 10 = 5; 15 + 10 = 25] для первой координаты<br>[18 - 10 = 8; 18 + 10 = 28] для второй координаты
+</p>
+<p class="vspace">И для второй точки:
+</p>
+<p class="vspace">[-30 - 10 = -40; -30 + 10 = -20] для первой координаты<br>[-15 - 10 = -25; -15 + 10 = -5] для второй координаты
+</p>
+<p class="vspace">Аналогично рассчитываются интервалы для выбранных участков:
+</p>
+<p class="vspace">[12; 32] [-41; -21]<br>[8; 28] [30; 50]<br>[-35; 15] [37; 57]
+</p>
+<p class="vspace">Заметьте, что здесь по каждой из координат размер области одинаков и равен 20, в реальности это не обязательно так.
+</p>
+<p class="vspace">В каждый из лучших интервалов отправляем по 5 пчел, а на выбранные участки по 2 пчелы. Причем, мы не будем менять положение пчел, нашедших лучшие и выбранные участки, иначе есть вероятность того, что на следующей итерации максимальное значение целевой функции будет хуже, чем на предыдущем шаге.
+</p>
+<p class="vspace">Пусть теперь на первом лучшем участке мы имеем следующих пчел:
+</p>
+<p class="vspace">f(15, 18) = -549<br>f(7, 12) = 193<br>f(10, 10) = 100<br>f(16, 24) = 832<br>f(18, 24) = 900
+</p>
+<p class="vspace">Как видно, уже среди этих новых точек есть такие, которые лучше, чем предыдущее решение.
+</p>
+<p class="vspace">Так же поступаем и со вторым лучшим участком, а затем аналогично и с выбранными участками. После чего среди всех новых точек снова отмечаются лучшие и выбранные, а процесс повторяется заново.
+</p>
+<p class="vspace"><a name="source" id="source"></a>
+</p><h2>Реализация алгоритма на Python</h2>
+<p>Далее мы рассмотрим пример реализации алгоритма роя пчел на языке Python. Скачать исходники вы можете <a class="urllink" href="">здесь</a>.
+</p>
+<p class="vspace">В этом примере используются две дополнительные библиотеки. <a class="urllink" href="http://matplotlib.sourceforge.net/">Matplotlib</a> используется для визуализации данных, а <a class="urllink" href="http://psyco.sourceforge.net/">Psyco</a> для ускорения расчета. Библиотека Psyco в данном случае не обязательна, пример будет работать и без нее, но значительно медленнее.
+</p>
+<div class="vspace"></div><h3>Структура исходников</h3>
+<p>Архив с исходниками содержит следующие файлы:
+</p>
+<p class="vspace"><strong>pybee.py</strong> - основные классы, реализующие алгоритм роя пчел.<br><strong>beetest.py</strong> - основной модуль примера, в котором содержатся все параметры алгоритма. Этот скрипт и нужно запускать.<br><strong>beeexamples.py</strong> - в это модуле содержатся различные классы пчел для разных целевых функций.<br><strong>beetestfunc.py</strong> - вспомогательные функции для визуализации процесса расчета.
+</p>
+<div class="vspace"></div><h3>Основные классы</h3>
+<p>В модуле <em>pybee</em> содержатся следующие классы:
+</p>
+<p class="vspace"><strong>floatbee</strong> - базовый класс для пчел, положение которых описывается числами с плавающей точкой.<br><strong>hive</strong> - класс улея, внутри которого и происходят основные действия алгоритма по выделению лучших и выбранных участков, а также отправка пчел на нужные позиции.<br><strong>statistic</strong> - вспомогательный класс для сбора статистики по сходимости алгоритма роя пчел. Этот класс накапливает лучшие результаты для каждого шага итерации.
+</p>
+<p class="vspace">Рассмотрим все эти классы более подробно.
+</p>
+<div class="vspace"></div><h4>Класс floatbee</h4>
+<p>Сначала рассмотрим класс <em>floatbee</em>. Это базовый класс, от которого необходимо наследоваться и переопределить один метод, о котором поговорим чуть позже, кроме того в конструкторе нужно определить некоторые члены. А именно:
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock2">
+  <div class="sourceblocktext"><div class="python"><span class="kw2">self</span>.<span class="me1">position</span><br>
+<span class="kw2">self</span>.<span class="me1">minval</span><br>
+<span class="kw2">self</span>.<span class="me1">maxval</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">Эти переменные должны быть типа списка (или массив) и содержать столько элементов, сколько аргументов имеет целевая функция, которую необходимо оптимизировать. 
+</p>
+<p class="vspace"><em>self.position</em> хранит в себе одно решение, которое сопоставлено с данной пчелой. В конструкторе рекомендуется заполнять этот список случайными величинами.
+</p>
+<p class="vspace"><em>self.minval</em> и <em>self.maxval</em> хранят списки, содержащие соответственно минимальные и максимальные значения для координат из <em>self.position</em>.
+</p>
+<p class="vspace">Допустим, что положение у нас определяется двумя координатами, причем первая координата может изменяться в пределах [-1; 1], а вторая в пределах [-11; 12]. Тогда заполнение этих членов может быть таким:
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock3">
+  <div class="sourceblocktext"><div class="python"><span class="kw2">self</span>.<span class="me1">minval</span> <span class="sy0">=</span> <span class="br0">[</span>-<span class="nu0">1.0</span><span class="sy0">,</span> -<span class="nu0">11.0</span><span class="br0">]</span><br>
+<span class="kw2">self</span>.<span class="me1">maxval</span> <span class="sy0">=</span> <span class="br0">[</span><span class="nu0">1.0</span><span class="sy0">,</span> <span class="nu0">12.0</span><span class="br0">]</span><br>
+<br>
+<span class="kw2">self</span>.<span class="me1">position</span> <span class="sy0">=</span> <span class="br0">[</span><span class="kw3">random</span>.<span class="me1">uniform</span> <span class="br0">(</span><span class="kw2">self</span>.<span class="me1">minval</span><span class="br0">[</span>n<span class="br0">]</span><span class="sy0">,</span> <span class="kw2">self</span>.<span class="me1">maxval</span><span class="br0">[</span>n<span class="br0">]</span><span class="br0">)</span> <span class="kw1">for</span> n <span class="kw1">in</span> <span class="kw2">range</span> <span class="br0">(</span><span class="nu0">2</span><span class="br0">)</span> <span class="br0">]</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">Таким образом, размеры списков <em>self.position</em>, <em>self.minval</em> и <em>self.maxval</em> всегда должны совпадать.
+</p>
+<p class="vspace">После заполнение списков этих членов, необходимо перегрузить метод 
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock4">
+  <div class="sourceblocktext"><div class="python"><span class="kw1">def</span> calcfitness <span class="br0">(</span><span class="kw2">self</span><span class="br0">)</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">Именно в нем рассчитывается целевая функция (или здоровье пчелы). Следует особо отметить, что само значение целевой функции не возвращается из этого метода, а присваивается внутри метода члену <em>self.fitness</em>. Сам метод не должен ничего возвращать.
+</p>
+<p class="vspace">Это сделано для того, чтобы целевая функция считалась только один раз при изменении координат пчелы. Причем метод calcfitness() должен быть обязательно выполнен после любых перемещений пчелы.
+</p>
+<p class="vspace">Рассмотрим пример. Пусть целевая функция у нас будет f(x, y) = -x^2 - y^2, тогда <em>calcfitness()</em> может выглядеть следующим образом:
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock5">
+  <div class="sourceblocktext"><div class="python"><span class="kw1">class</span> mybee <span class="br0">(</span>pybee.<span class="me1">floatbee</span><span class="br0">)</span>:<br>
+&nbsp; &nbsp; ...<br>
+<br>
+&nbsp; &nbsp; <span class="kw1">def</span> calcfitness <span class="br0">(</span><span class="kw2">self</span><span class="br0">)</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="st0">"""Расчет целевой функции. Этот метод необходимо перегрузить в производном классе. <br>
+&nbsp; &nbsp; &nbsp; &nbsp; Функция не возвращает значение целевой функции, а только устанавливает член self.fitness<br>
+&nbsp; &nbsp; &nbsp; &nbsp; Эту функцию необходимо вызывать после каждого изменения координат пчелы"""</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">fitness</span> <span class="sy0">=</span> <span class="nu0">0.0</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">for</span> val <span class="kw1">in</span> <span class="kw2">self</span>.<span class="me1">position</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">fitness</span> -<span class="sy0">=</span> val * val</div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">Тогда с учетом вышесказанного конструктор для нашей пчелы будет выглядеть следующим образом:
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock6">
+  <div class="sourceblocktext"><div class="python"><span class="kw1">class</span> mybee <span class="br0">(</span>pybee.<span class="me1">floatbee</span><span class="br0">)</span>:<br>
+&nbsp; &nbsp; ...<br>
+<br>
+&nbsp; &nbsp; <span class="kw1">def</span> <span class="kw4">__init__</span> <span class="br0">(</span><span class="kw2">self</span><span class="br0">)</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">minval</span> <span class="sy0">=</span> <span class="br0">[</span>-<span class="nu0">1.0</span><span class="sy0">,</span> -<span class="nu0">11.0</span><span class="br0">]</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">maxval</span> <span class="sy0">=</span> <span class="br0">[</span><span class="nu0">1.0</span><span class="sy0">,</span> <span class="nu0">12.0</span><span class="br0">]</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">position</span> <span class="sy0">=</span> <span class="br0">[</span><span class="kw3">random</span>.<span class="me1">uniform</span> <span class="br0">(</span><span class="kw2">self</span>.<span class="me1">minval</span><span class="br0">[</span>n<span class="br0">]</span><span class="sy0">,</span> <span class="kw2">self</span>.<span class="me1">maxval</span><span class="br0">[</span>n<span class="br0">]</span><span class="br0">)</span> <span class="kw1">for</span> n <span class="kw1">in</span> <span class="kw2">range</span> <span class="br0">(</span><span class="nu0">2</span><span class="br0">)</span> <span class="br0">]</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">calcfitness</span><span class="br0">(</span><span class="br0">)</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">С точки зрения пользователя больше про класс пчел ничего знать не обязательно. Оставшиеся члены класса <em>floatbee</em> будут кратко рассмотрены по мере их упоминания при разборе основного алгоритма.
+</p>
+<div class="vspace"></div><h4>Класс hive</h4>
+<p>Основные шаги алгоритма роя пчел реализованы внутри класса <em>hive</em> (улей), поговорим о нем подробнее.
+</p>
+<p class="vspace">Для начала рассмотрим параметры конструктора
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock7">
+  <div class="sourceblocktext"><div class="python"><span class="kw1">class</span> hive:<br>
+&nbsp; &nbsp; ...<br>
+<br>
+&nbsp; &nbsp; <span class="kw1">def</span> <span class="kw4">__init__</span> <span class="br0">(</span><span class="kw2">self</span><span class="sy0">,</span> scoutbeecount<span class="sy0">,</span> selectedbeecount<span class="sy0">,</span> bestbeecount<span class="sy0">,</span> \<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; selsitescount<span class="sy0">,</span> bestsitescount<span class="sy0">,</span> \<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; range_list<span class="sy0">,</span> beetype<span class="br0">)</span>:</div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">Как видите, в конструктор передается 7 параметров (не считая <em>self</em>):
+</p>
+<p class="vspace"><strong>scoutbeecount</strong> - количество пчел-разведчиков<br><strong>selectedbeecount</strong> - количество пчел, посылаемых на каждый из выбранных (не лучших) участков. Имеется в виду, сколько пчел будет отправлено на один участок.<br><strong>bestbeecount</strong> - количество пчел, посылаемых на каждый из лучших участков. <br><strong>selsitescount</strong> - количество выбранных (перспективных, но не лучших) участков.<br><strong>bestsitescount</strong> - количество лучших участков.<br><strong>range_list</strong> - список, элементы которого определяют размеры выбранных и лучших участков по каждой координате (об этом чуть ниже)<br><strong>beetype</strong> - класс пчел, производный от <em>floatbee</em>, который используется в алгоритме.
+</p>
+<p class="vspace">С первыми пятью параметрами и последним думаю все понятно, рассмотрим параметр <em>range_list</em>, который представляет собой список размеров областей, куда посылаются пчелы. Его роль в алгоритме проще показать на примере.
+</p>
+<p class="vspace">Пусть у нас положение участков определяется двумя координатами (целевая функция имеет два параметра, или пчелы "живут" в двумерном мире), тогда список (или массив) <em>range_list</em> должен иметь два элемента. Пусть это будут 
+</p>
+<p class="vspace">[1.0, 2.0]
+</p>
+<p class="vspace">Это значит, что при отправке пчелы в область какой-то точки (x; y), значение ее первой координаты будет случайным образом выбрано из интервала [x - 1.0; x + 1.0], а значение второй координаты - [y - 2.0; y + 2.0]. То есть, если мы отправим пчелу в область точки (10.0, 20.0), то в реальности получим координаты, которые будут лежать в пределах от 9.0 до 11.0 для первой координаты и от 18.0 до 22.0 для второй.
+</p>
+<p class="vspace">Кстати, для отправки пчелы в окрестность точки в классе <em>floatbee</em> есть метод 
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock8">
+  <div class="sourceblocktext"><div class="python"><span class="kw1">def</span> goto <span class="br0">(</span><span class="kw2">self</span><span class="sy0">,</span> otherpos<span class="sy0">,</span> range_list<span class="br0">)</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">в котором<br><strong>otherpos</strong> - точка, в окрестность которой посылается пчела<br><strong>range_list</strong> - тот же самый список размеров окрестностей, про который мы только что говорили.
+</p>
+<p class="vspace">Возвращаемся к конструктору класса <em>hive</em>. Рассмотрим его код
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock9">
+  <div class="sourceblocktext"><div class="python"><span class="kw1">class</span> hive:<br>
+&nbsp; &nbsp; ...<br>
+<br>
+&nbsp; &nbsp; <span class="kw1">def</span> <span class="kw4">__init__</span> <span class="br0">(</span><span class="kw2">self</span><span class="sy0">,</span> scoutbeecount<span class="sy0">,</span> selectedbeecount<span class="sy0">,</span> bestbeecount<span class="sy0">,</span> \<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; selsitescount<span class="sy0">,</span> bestsitescount<span class="sy0">,</span> \<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; range_list<span class="sy0">,</span> beetype<span class="br0">)</span>:<br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">scoutbeecount</span> <span class="sy0">=</span> scoutbeecount<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">selectedbeecount</span> <span class="sy0">=</span> selectedbeecount<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">bestbeecount</span> <span class="sy0">=</span> bestbeecount&nbsp; &nbsp; &nbsp; &nbsp; <br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">selsitescount</span> <span class="sy0">=</span> selsitescount<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">bestsitescount</span> <span class="sy0">=</span> bestsitescount<br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">beetype</span> <span class="sy0">=</span> beetype<br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="kw2">range</span> <span class="sy0">=</span> range_list<br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="co1"># Лучшая на данный момент позиция</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">bestposition</span> <span class="sy0">=</span> <span class="kw2">None</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="co1"># Лучшее на данный момент здоровье пчелы (чем больше, тем лучше)</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">bestfitness</span> <span class="sy0">=</span> -<span class="nu0">1.0e9</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="co1"># Начальное заполнение роя пчелами со случайными координатами</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; beecount <span class="sy0">=</span> scoutbeecount + selectedbeecount * selsitescount + bestbeecount * bestsitescount<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">swarm</span> <span class="sy0">=</span> <span class="br0">[</span>beetype<span class="br0">(</span><span class="br0">)</span> <span class="kw1">for</span> n <span class="kw1">in</span> <span class="kw2">xrange</span> <span class="br0">(</span>beecount<span class="br0">)</span><span class="br0">]</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="co1"># Лучшие и выбранные места</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">bestsites</span> <span class="sy0">=</span> <span class="br0">[</span><span class="br0">]</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">selsites</span> <span class="sy0">=</span> <span class="br0">[</span><span class="br0">]</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">swarm</span>.<span class="me1">sort</span> <span class="br0">(</span>floatbee.<span class="me1">sort</span><span class="sy0">,</span> reverse <span class="sy0">=</span> <span class="kw2">True</span><span class="br0">)</span> &nbsp; &nbsp; <br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">bestposition</span> <span class="sy0">=</span> <span class="kw2">self</span>.<span class="me1">swarm</span><span class="br0">[</span><span class="nu0">0</span><span class="br0">]</span>.<span class="me1">getposition</span><span class="br0">(</span><span class="br0">)</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">bestfitness</span> <span class="sy0">=</span> <span class="kw2">self</span>.<span class="me1">swarm</span><span class="br0">[</span><span class="nu0">0</span><span class="br0">]</span>.<span class="me1">fitness</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">Во-первых, в нем сохраняются все передаваемые параметры. Во-вторых, создается член <em>self.bestposition</em>, который хранит в себе лучшее на данный момент решение. 
+</p>
+<p class="vspace">Значение целевой функции для лучшего на данный момент решения хранится в члене <em>self.bestfitness</em>.
+</p>
+<p class="vspace">Затем создается рой пчел. Общее количество пчел в нем равно
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock10">
+  <div class="sourceblocktext"><div>beecount = scoutbeecount + selectedbeecount * selsitescount + bestbeecount * bestsitescount<br></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">То есть сумма количества разведчиков, количества пчел посылаемых на один выбранный участок, умноженное на количество выбранных участков, и количества пчел, посылаемых на один из лучших участков, умноженное на количество лучших участков.
+</p>
+<p class="vspace">Затем просто заполняется список члена <em>self.swarm</em> (рой):
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock11">
+  <div class="sourceblocktext"><div class="python"><span class="kw2">self</span>.<span class="me1">swarm</span> <span class="sy0">=</span> <span class="br0">[</span>beetype<span class="br0">(</span><span class="br0">)</span> <span class="kw1">for</span> n <span class="kw1">in</span> <span class="kw2">xrange</span> <span class="br0">(</span>beecount<span class="br0">)</span><span class="br0">]</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">Напомню, что в конструкторе все параметры пчелы должны инициализироваться случайным образом, поэтому получается, что при создании роя пчел, все они выступают в роли пчел-разведчиков, которых отправляют на случайные точки. С точки зрения алгоритма это не обязательно должно быть так. Можно в первый раз отправить только заданное количество пчел-разведчиков, а пчел, предназначенных для лучших и выбранных участков, отправлять на следующих итерациях. Но в данном случае в самом начале на случайные места отправляются все пчелы, участвующие в алгоритме.
+</p>
+<p class="vspace">После того как рой создан, он сортируется по убыванию целевой функции у каждой пчелы. В качестве функции сравнения передается метод <em>sort()</em> из класса <em>floatbee</em>.
+</p>
+<p class="vspace">После сортировки лучшим будет решение у пчелы, находящейся в самом начале списка. Значение целевой функции для данной пчелы сохраняется в член <em>self.bestfitness</em>, а в член <em>self.bestposition</em> сохраняется копия (!) координат лучшей пчелы. Для получения копии координат используется метод <em>getposition()</em> из класса <em>floatbee</em>:
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock12">
+  <div class="sourceblocktext"><div class="python"><span class="kw1">class</span> floatbee:<br>
+&nbsp; &nbsp; ...<br>
+<br>
+&nbsp; &nbsp; <span class="kw1">def</span> getposition <span class="br0">(</span><span class="kw2">self</span><span class="br0">)</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="st0">"""Вернуть копию (!) своих координат"""</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">return</span> <span class="br0">[</span>val <span class="kw1">for</span> val <span class="kw1">in</span> <span class="kw2">self</span>.<span class="me1">position</span><span class="br0">]</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">Приступаем к самому интересному, к методу, где и содержатся действия для основных шагов алгоритма.
+</p>
+<p class="vspace">Для выполнения одной итерации алгоритма роя пчел необходимо из экземпляра класса <em>hive</em> вызвать метод 
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock13">
+  <div class="sourceblocktext"><div class="python"><span class="kw1">def</span> nextstep <span class="br0">(</span><span class="kw2">self</span><span class="br0">)</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">Рассмотрим этот метод более подробно.
+</p>
+<p class="vspace">Этот метод состоит из двух логических этапов. Сначала выбираются лучшие и выбранные участки. Выбор лучших участков происходит следующим образом:
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock14">
+  <div class="sourceblocktext"><div class="python"><span class="kw1">class</span> hive:<br>
+&nbsp; &nbsp; ...<br>
+<br>
+&nbsp; &nbsp; <span class="kw1">def</span> nextstep <span class="br0">(</span><span class="kw2">self</span><span class="br0">)</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="co1"># Выбираем самые лучшие места и сохраняем ссылки на тех, кто их нашел</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">bestsites</span> <span class="sy0">=</span> <span class="br0">[</span> <span class="kw2">self</span>.<span class="me1">swarm</span><span class="br0">[</span><span class="nu0">0</span><span class="br0">]</span> <span class="br0">]</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; curr_index <span class="sy0">=</span> <span class="nu0">1</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">for</span> currbee <span class="kw1">in</span> <span class="kw2">self</span>.<span class="me1">swarm</span> <span class="br0">[</span>curr_index: -<span class="nu0">1</span><span class="br0">]</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="co1"># Если пчела находится в пределах уже отмеченного лучшего участка, то ее положение не считаем </span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">if</span> currbee.<span class="me1">otherpatch</span> <span class="br0">(</span><span class="kw2">self</span>.<span class="me1">bestsites</span><span class="sy0">,</span> <span class="kw2">self</span>.<span class="kw2">range</span><span class="br0">)</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">bestsites</span>.<span class="me1">append</span> <span class="br0">(</span>currbee<span class="br0">)</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">if</span> <span class="kw2">len</span> <span class="br0">(</span><span class="kw2">self</span>.<span class="me1">bestsites</span><span class="br0">)</span> <span class="sy0">==</span> <span class="kw2">self</span>.<span class="me1">bestsitescount</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">break</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; curr_index +<span class="sy0">=</span> <span class="nu0">1</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; ...</div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">Пчелы, нашедшие лучшие участки помещаются в список <em>self.bestsites</em>. Во-первых, туда помещается пчела, находящаяся в начале списка, а затем происходит перебор остальных пчел до тех пор пока не будет отобрано нужное количество. Причем пропускаются пчелы, которые находятся в одном участке с пчелой, которая уже находится в списке <em>self.bestsites</em>. <em>curr_index</em> хранит номер пчелы в списке, которую будем проверять следующей.
+</p>
+<p class="vspace">Проверка того является ли участок, найденный пчелой новым или какая-то пчела уже находится поблизости, происходит внутри метода <em>otherpatch()</em> класса <em>floatbee</em>. 
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock15">
+  <div class="sourceblocktext"><div class="python"><span class="kw1">class</span> floatbee:<br>
+&nbsp; &nbsp; ...<br>
+<br>
+&nbsp; &nbsp; <span class="kw1">def</span> otherpatch <span class="br0">(</span><span class="kw2">self</span><span class="sy0">,</span> bee_list<span class="sy0">,</span> range_list<span class="br0">)</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="st0">"""Проверить находится ли пчела на том же участке, что и одна из пчел в bee_list. <br>
+&nbsp; &nbsp; &nbsp; &nbsp; range_list - интервал изменения каждой из координат"""</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">if</span> <span class="kw2">len</span> <span class="br0">(</span>bee_list<span class="br0">)</span> <span class="sy0">==</span> <span class="nu0">0</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">return</span> <span class="kw2">True</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">for</span> curr_bee <span class="kw1">in</span> bee_list:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; position <span class="sy0">=</span> curr_bee.<span class="me1">getposition</span><span class="br0">(</span><span class="br0">)</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">for</span> n <span class="kw1">in</span> <span class="kw2">xrange</span> <span class="br0">(</span> <span class="kw2">len</span> <span class="br0">(</span><span class="kw2">self</span>.<span class="me1">position</span><span class="br0">)</span> <span class="br0">)</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">if</span> <span class="kw2">abs</span> <span class="br0">(</span><span class="kw2">self</span>.<span class="me1">position</span><span class="br0">[</span>n<span class="br0">]</span> - position<span class="br0">[</span>n<span class="br0">]</span><span class="br0">)</span> <span class="sy0">&gt;</span> range_list<span class="br0">[</span>n<span class="br0">]</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">return</span> <span class="kw2">True</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">return</span> <span class="kw2">False</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">В данном случае в качестве <em>bee_list</em> передается список лучших пчел <em>self.bestsites</em>, а в качестве <em>range_list</em> все тот же список размеров окрестностей. Участок, найденный пчелой, считается новым, если в списке bee_list нет пчелы, расстояние до которой по каждой из координат не превышает соответствующего размера из <em>range_list</em>.
+</p>
+<p class="vspace">После нахождения таким образом лучших участков аналогично отмечаем выбранные участки.
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock16">
+  <div class="sourceblocktext"><div class="python"><span class="kw1">class</span> hive:<br>
+&nbsp; &nbsp; ...<br>
+<br>
+&nbsp; &nbsp; <span class="kw1">def</span> nextstep <span class="br0">(</span><span class="kw2">self</span><span class="br0">)</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; ...<br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">selsites</span> <span class="sy0">=</span> <span class="br0">[</span><span class="br0">]</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">for</span> currbee <span class="kw1">in</span> <span class="kw2">self</span>.<span class="me1">swarm</span> <span class="br0">[</span>curr_index: -<span class="nu0">1</span><span class="br0">]</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">if</span> currbee.<span class="me1">otherpatch</span> <span class="br0">(</span><span class="kw2">self</span>.<span class="me1">bestsites</span><span class="sy0">,</span> <span class="kw2">self</span>.<span class="kw2">range</span><span class="br0">)</span> <span class="kw1">and</span> currbee.<span class="me1">otherpatch</span> <span class="br0">(</span><span class="kw2">self</span>.<span class="me1">selsites</span><span class="sy0">,</span> <span class="kw2">self</span>.<span class="kw2">range</span><span class="br0">)</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">selsites</span>.<span class="me1">append</span> <span class="br0">(</span>currbee<span class="br0">)</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">if</span> <span class="kw2">len</span> <span class="br0">(</span><span class="kw2">self</span>.<span class="me1">selsites</span><span class="br0">)</span> <span class="sy0">==</span> <span class="kw2">self</span>.<span class="me1">selsitescount</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">break</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">Пчелы с выбранных участков сохраняются в список <em>self.selsites</em>.
+</p>
+<p class="vspace">После того как мы отметили лучшие и выбранные участки, отправим пчел на соответствующие позиции.
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock17">
+  <div class="sourceblocktext"><div class="python"><span class="kw1">class</span> hive:<br>
+&nbsp; &nbsp; ...<br>
+<br>
+&nbsp; &nbsp; <span class="kw1">def</span> nextstep <span class="br0">(</span><span class="kw2">self</span><span class="br0">)</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; ...<br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="co1"># Номер очередной отправляемой пчелы. 0-ую пчелу никуда не отправляем</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; bee_index <span class="sy0">=</span> <span class="nu0">1</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">for</span> best_bee <span class="kw1">in</span> <span class="kw2">self</span>.<span class="me1">bestsites</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; bee_index <span class="sy0">=</span> <span class="kw2">self</span>.<span class="me1">sendbees</span> <span class="br0">(</span>best_bee.<span class="me1">getposition</span><span class="br0">(</span><span class="br0">)</span><span class="sy0">,</span> bee_index<span class="sy0">,</span> <span class="kw2">self</span>.<span class="me1">bestbeecount</span><span class="br0">)</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">for</span> sel_bee <span class="kw1">in</span> <span class="kw2">self</span>.<span class="me1">selsites</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; bee_index <span class="sy0">=</span> <span class="kw2">self</span>.<span class="me1">sendbees</span> <span class="br0">(</span>sel_bee.<span class="me1">getposition</span><span class="br0">(</span><span class="br0">)</span><span class="sy0">,</span> bee_index<span class="sy0">,</span> <span class="kw2">self</span>.<span class="me1">selectedbeecount</span><span class="br0">)</span> <br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="co1"># Оставшихся пчел пошлем куда попадет</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">for</span> curr_bee <span class="kw1">in</span> <span class="kw2">self</span>.<span class="me1">swarm</span><span class="br0">[</span>bee_index: -<span class="nu0">1</span><span class="br0">]</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; curr_bee.<span class="me1">gotorandom</span><span class="br0">(</span><span class="br0">)</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">swarm</span>.<span class="me1">sort</span> <span class="br0">(</span>floatbee.<span class="me1">sort</span><span class="sy0">,</span> reverse <span class="sy0">=</span> <span class="kw2">True</span><span class="br0">)</span> &nbsp; &nbsp; <br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">bestposition</span> <span class="sy0">=</span> <span class="kw2">self</span>.<span class="me1">swarm</span><span class="br0">[</span><span class="nu0">0</span><span class="br0">]</span>.<span class="me1">getposition</span><span class="br0">(</span><span class="br0">)</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">bestfitness</span> <span class="sy0">=</span> <span class="kw2">self</span>.<span class="me1">swarm</span><span class="br0">[</span><span class="nu0">0</span><span class="br0">]</span>.<span class="me1">fitness</span><br>
+&nbsp;</div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">За отправку пчел отвечает метод <em>sendbees()</em> класса <em>hive</em>. Суть ее состоит в том, что она отправляет заданное количество пчел, пропуская тех, которые уже находятся среди лучших и выбранных пчел. Я не буду приводить здесь этот метод, так он довольно простой и для понятия алгоритма не так важен. Но нужно сказать, что внутри <em>sendbees()</em> вызывается метод <em>goto()</em> класса <em>floatbee</em>. Его мы рассмотрим поподробнее.
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock18">
+  <div class="sourceblocktext"><div class="python"><span class="kw1">class</span> floatbee:<br>
+&nbsp; &nbsp; ...<br>
+<br>
+&nbsp; &nbsp; <span class="kw1">def</span> goto <span class="br0">(</span><span class="kw2">self</span><span class="sy0">,</span> otherpos<span class="sy0">,</span> range_list<span class="br0">)</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="st0">"""Перелет в окрестность места, которое нашла другая пчела. Не в то же самое место! """</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="co1"># К каждой из координат добавляем случайное значение</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">position</span> <span class="sy0">=</span> <span class="br0">[</span>otherpos<span class="br0">[</span>n<span class="br0">]</span> + <span class="kw3">random</span>.<span class="me1">uniform</span> <span class="br0">(</span>-range_list<span class="br0">[</span>n<span class="br0">]</span><span class="sy0">,</span> range_list<span class="br0">[</span>n<span class="br0">]</span><span class="br0">)</span> \<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">for</span> n <span class="kw1">in</span> <span class="kw2">xrange</span> <span class="br0">(</span><span class="kw2">len</span> <span class="br0">(</span>otherpos<span class="br0">)</span> <span class="br0">)</span> <span class="br0">]</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="co1"># Проверим, чтобы не выйти за заданные пределы</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">checkposition</span><span class="br0">(</span><span class="br0">)</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="co1"># Расчитаем и сохраним целевую функцию</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">calcfitness</span><span class="br0">(</span><span class="br0">)</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">Здесь сначала заполняется список новых координат, которые складываются из точки, в которую отправляют пчелу и случайной величины в интервале от -range_list[n] до range_list[n].
+</p>
+<p class="vspace">Затем вызывается метод <em>checkposition()</em>, который корректирует координаты, если они выходят за заданные пределы (помните списки <em>minval</em> и <em>maxval</em>, про которые мы говорили при обсуждении конструктора пчел?)
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock19">
+  <div class="sourceblocktext"><div class="python"><span class="kw1">class</span> floatbee:<br>
+&nbsp; &nbsp; ...<br>
+<br>
+&nbsp; &nbsp; <span class="kw1">def</span> checkposition <span class="br0">(</span><span class="kw2">self</span><span class="br0">)</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="st0">"""Скорректировать координаты пчелы, если они выходят за установленные пределы"""</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">for</span> n <span class="kw1">in</span> <span class="kw2">range</span> <span class="br0">(</span> <span class="kw2">len</span> <span class="br0">(</span><span class="kw2">self</span>.<span class="me1">position</span><span class="br0">)</span> <span class="br0">)</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">if</span> <span class="kw2">self</span>.<span class="me1">position</span><span class="br0">[</span>n<span class="br0">]</span> <span class="sy0">&lt;</span> <span class="kw2">self</span>.<span class="me1">minval</span><span class="br0">[</span>n<span class="br0">]</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">position</span><span class="br0">[</span>n<span class="br0">]</span> <span class="sy0">=</span> <span class="kw2">self</span>.<span class="me1">minval</span><span class="br0">[</span>n<span class="br0">]</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">elif</span> <span class="kw2">self</span>.<span class="me1">position</span><span class="br0">[</span>n<span class="br0">]</span> <span class="sy0">&gt;</span> <span class="kw2">self</span>.<span class="me1">maxval</span><span class="br0">[</span>n<span class="br0">]</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">position</span><span class="br0">[</span>n<span class="br0">]</span> <span class="sy0">=</span> <span class="kw2">self</span>.<span class="me1">maxval</span><span class="br0">[</span>n<span class="br0">]</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">После того как были отправлены пчелы на лучшие и выбранные места, оставшихся пчел из улея отправляем на случайные координаты. Затем все пчелы опять сортируются по убыванию целевой функции и сохраняются лучшие позиции и лучшее значение целевой функции.
+</p>
+<p class="vspace">Метод <em>nextstep()</em> вызывается пользователем до тех пор пока не будет выполнено одно из условий останова, но об этом мы поговорим, когда будем разбирать примеры использования алгоритма роя пчел.
+</p>
+<div class="vspace"></div><h4>Класс statistic</h4>
+<p>В модуле <em>pybee</em> есть еще один класс, который не используется в алгоритме непосредственно, но который может помочь в отладке и визуализации результатов. Это класс <em>statistic</em>, который сохраняет найденное решение для каждого шага итерации. Причем, один экземпляр класса <em>statistic</em> можно использовать для нескольких независимых запусков алгоритма. Это может понадобиться для того, чтобы посмотреть, например, как сходятся параметры при усреднении по нескольким запускам. 
+</p>
+<p class="vspace">Рассмотрим конструктор класса <em>statistic</em> и обсудим способ хранения данных в нем.
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock20">
+  <div class="sourceblocktext"><div class="python"><span class="kw1">class</span> statistic:<br>
+&nbsp; &nbsp; <span class="st0">""" Класс для сбора статистики по запускам алгоритма"""</span><br>
+&nbsp; &nbsp; <span class="kw1">def</span> <span class="kw4">__init__</span> <span class="br0">(</span><span class="kw2">self</span><span class="br0">)</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="co1"># Индекс каждого списка соответствует итерации. </span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="co1"># В &nbsp;элементе каждого списка хранится список значений для каждого запуска</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="co1"># Добавлять надо каждую итерацию</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="co1"># Значения целевой функции в зависимости от номера итерации</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">fitness</span> <span class="sy0">=</span> <span class="br0">[</span><span class="br0">]</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="co1"># Значения координат в зависимости от итерации</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">positions</span> <span class="sy0">=</span> <span class="br0">[</span><span class="br0">]</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="co1"># Размеры областей для поискарешения в зависимости от итерации</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="kw2">range</span> <span class="sy0">=</span> <span class="br0">[</span><span class="br0">]</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">В классе содержатся три списка, которые хранят значения целевой функции, координат и размеров областей. Хранятся значения следующим образом (будем рассматривать на примере <em>self.positions</em>). <em>self.positions</em> хранит список, первый индекс которого обозначает номер запуска алгоритма (начиная с 0). Внутри каждого элемента хранится список, каждый элемент которого обозначает номер итерации алгоритма. А внутри этого второго списка хранится список координат, лучших на данную итерацию. То есть, чтобы получить k-ую координату, которая была при m-ой итерации при n-ом запуске алгоритма, необходимо написать следующее выражение (считаем, что <em>stat</em> - экземпляр класса <em>statistic</em>):
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock21">
+  <div class="sourceblocktext"><div>stat.positions[n][m][k]<br></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">Аналогично со списком <em>range</em>. Список <em>fitness</em> немного проще из-за того, что целевая функция представляет собой число, а не список, то есть индекса <em>k</em> у нее нет.
+</p>
+<p class="vspace">Для каждой итерации алгоритма (после каждого вызова метода <em>nextstep()</em> класса <em>hive</em>) необходимо вызвывать метод <em>add()</em>, который добавляет результат в статистику:
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock22">
+  <div class="sourceblocktext"><div class="python"><span class="kw1">def</span> add <span class="br0">(</span><span class="kw2">self</span><span class="sy0">,</span> runnumber<span class="sy0">,</span> currhive<span class="br0">)</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">Не буду приводить исходный код этой функции, так как для понимания алгоритма этого не требуется, в нем просто сохраняются в соответствующих списках значения целевой функции, координаты и интервал изменения диапазонов координат согласно структуре, которую мы только что рассмотрели.
+</p>
+<p class="vspace">Также я не буду приводить здесь методы, предназначенные для вывода таблиц целевой функции и координат. Их использование будет ясно из примеров, а исходный код вы можете посмотреть, скачал архив с исходниками.
+</p>
+<p class="vspace"><a name="example" id="example"></a>
+</p><h2>Пример работы алгоритма</h2>
+<p>Вот мы и подошли к самому интересному разделу, где будет много цветных картинок. :)
+</p>
+<p class="vspace">В качестве примеров в исходниках используются пять целевых функций, описанных в [3], а так же еще одна дополнительная. Разумеется, все шесть функций мы здесь рассматривать не будем, рассмотрим только одну из них.
+</p>
+<p class="vspace">В качестве примеров рассмотрим только класс пчел, производный от <em>floatbee</em>, остальные классы будут устроены аналогичным образом. Все классы пчел для различных целевых функций описаны в файле <em>beeexamples.py</em>.
+</p>
+<p class="vspace">Итак, пусть наша целевая функция имеет вид (так называемая гиперсфера)
+</p>
+<div class="vspace"></div><div class="img imgonly"><img src="./Алгоритм пчел для оптимизации функции_files/func.gif" alt="" title=""></div>
+<p class="vspace">Максимум такой функции находится в точке, когда все координаты равны 0. Рассмотрим класс пчелы для этой целевой функции.
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock23">
+  <div class="sourceblocktext"><div class="python"><span class="kw1">class</span> spherebee <span class="br0">(</span>pybee.<span class="me1">floatbee</span><span class="br0">)</span>:<br>
+&nbsp; &nbsp; <span class="st0">"""Функция - сумма квадратов по каждой координате"""</span><br>
+<br>
+&nbsp; &nbsp; <span class="co1"># Количество координат</span><br>
+&nbsp; &nbsp; count <span class="sy0">=</span> <span class="nu0">20</span><br>
+<br>
+&nbsp; &nbsp; <span class="kw1">def</span> <span class="kw4">__init__</span> <span class="br0">(</span><span class="kw2">self</span><span class="br0">)</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; pybee.<span class="me1">floatbee</span>.<span class="kw4">__init__</span> <span class="br0">(</span><span class="kw2">self</span><span class="br0">)</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">minval</span> <span class="sy0">=</span> <span class="br0">[</span>-<span class="nu0">150.0</span><span class="br0">]</span> * spherebee.<span class="me1">count</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">maxval</span> <span class="sy0">=</span> <span class="br0">[</span><span class="nu0">150.0</span><span class="br0">]</span> * spherebee.<span class="me1">count</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">position</span> <span class="sy0">=</span> <span class="br0">[</span><span class="kw3">random</span>.<span class="me1">uniform</span> <span class="br0">(</span><span class="kw2">self</span>.<span class="me1">minval</span><span class="br0">[</span>n<span class="br0">]</span><span class="sy0">,</span> <span class="kw2">self</span>.<span class="me1">maxval</span><span class="br0">[</span>n<span class="br0">]</span><span class="br0">)</span> <span class="kw1">for</span> n <span class="kw1">in</span> <span class="kw2">xrange</span> <span class="br0">(</span>spherebee.<span class="me1">count</span><span class="br0">)</span> <span class="br0">]</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">calcfitness</span><span class="br0">(</span><span class="br0">)</span><br>
+<br>
+&nbsp; &nbsp; <span class="kw1">def</span> calcfitness <span class="br0">(</span><span class="kw2">self</span><span class="br0">)</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="st0">"""Расчет целевой функции. Этот метод необходимо перегрузить в производном классе. <br>
+&nbsp; &nbsp; &nbsp; &nbsp; Функция не возвращает значение целевой функции, а только устанавливает член self.fitness<br>
+&nbsp; &nbsp; &nbsp; &nbsp; Эту функцию необходимо вызывать после каждого изменения координат пчелы"""</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">fitness</span> <span class="sy0">=</span> <span class="nu0">0.0</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">for</span> val <span class="kw1">in</span> <span class="kw2">self</span>.<span class="me1">position</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw2">self</span>.<span class="me1">fitness</span> -<span class="sy0">=</span> val * val<br>
+<br>
+&nbsp; &nbsp; <span class="sy0">@</span><span class="kw2">staticmethod</span><br>
+&nbsp; &nbsp; <span class="kw1">def</span> getstartrange <span class="br0">(</span><span class="br0">)</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">return</span> <span class="br0">[</span><span class="nu0">150.0</span><span class="br0">]</span> &nbsp;* spherebee.<span class="me1">count</span><br>
+<br>
+&nbsp; &nbsp; <span class="sy0">@</span><span class="kw2">staticmethod</span><br>
+&nbsp; &nbsp; <span class="kw1">def</span> getrangekoeff <span class="br0">(</span><span class="br0">)</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">return</span> <span class="br0">[</span><span class="nu0">0.98</span><span class="br0">]</span> &nbsp;* spherebee.<span class="me1">count</span>&nbsp; &nbsp; </div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">Как видно, этот класс пчелы довольно компактный, разберем его составные части. Все рассматриваемые здесь классы пчел (в том числе и не рассматриваемые, но находящиеся в исходниках) кроме обязательных членов и методов, необходимых для работы алгоритма (о которых мы уже говорили) будут обладать дополнительными членами и методами, необходимыми для запуска примеров. Это сделано для того, чтобы в примерах можно было бы легко менять класс используемых пчел, а также визуализировать данные, не заботясь о количестве используемых координат. Все это мы обсудим подробнее.
+</p>
+<p class="vspace">Обратите внимание на переменную <em>count</em> внутри класса, она обозначает количество координат (n) нашей гиперсферы, в других классах пчел так же используется эта переменная.
+</p>
+<p class="vspace">Начнем с конструктора. В нем для порядка сначала вызывается конструктор базового класса <em>floatbee</em>, затем создаются три списка: 
+</p>
+<div class="vspace"></div><ul><li>Список минимальных значений для каждой из координат (<em>self.minval</em>).
+</li><li>Список максимальных значений (<em>self.maxval</em>).
+</li><li>Список текущих координат (<em>self.position</em>), заполненный случайными величинами.
+</li></ul><p class="vspace">После заполнения координатами списка <em>self.position</em> вызывается метод <em>self.calcfitness()</em> для вычисления целевой функции, используя текущие координаты. Метод <em>calcfitness()</em> не должен вызывать вопросов.
+</p>
+<p class="vspace">Затем идут два очень простых статических метода, которые облегчают запуск примеров независимо от того какой класс пчел используется. Метод <em>getstartrange()</em> используется для задания начальных размеров для каждой из областей. Именно этот список и передается в конструктор класса <em>hive</em>.
+</p>
+<p class="vspace">Кроме того есть еще один статический метод <em>getrangekoeff()</em>, возвращающий список коэффициентов, определяющих во сколько раз будут уменьшаться размеры областей при необходимости. В данном примере эти коэффициенты равны 0.98, т.е. каждый раз, когда надо будет сузить область поиска, элементы списка <em>range</em> класса <em>hive</em> будут умножаться на 0.98.
+</p>
+<p class="vspace">Перейдем теперь к рассмотрению скрипта <em>beetest.py</em>, из которого и происходит запуск алгоритма. Этот скритп требует, чтобы был установлен пакет <em>pylab</em> (он же Matplotlib), который используется для визуализации данных. Кроме того очень желательно, чтобы был установлен пакет <em>psyco</em>, который существенно ускоряет расчет, хотя и без него скрипт будет работать.
+</p>
+<p class="vspace">Думаю, что нет смысла описывать очень подробно каждую строку из <em>beetest.py</em>, рассмотрим только ключевые моменты. 
+</p>
+<p class="vspace">Сначала создается класс для сбора статистики 
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock24">
+  <div class="sourceblocktext"><div class="python"><span class="kw3">stat</span> <span class="sy0">=</span> pybee.<span class="me1">statistic</span><span class="br0">(</span><span class="br0">)</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">Параметры алгоритма роя пчел задаются после после комментария
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock25">
+  <div class="sourceblocktext"><div class="python"><span class="co1">###################################################</span><br>
+<span class="co1">## &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Параметры алгоритма</span><br>
+<span class="co1">###################################################</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">В первую очередь задается класс используемых пчел. Для этого надо раскомментарить одну из следующих строк:
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock26">
+  <div class="sourceblocktext"><div class="python">beetype <span class="sy0">=</span> beeexamples.<span class="me1">spherebee</span><br>
+<span class="co1">#beetype = beeexamples.dejongbee</span><br>
+<span class="co1">#beetype = beeexamples.goldsteinbee</span><br>
+<span class="co1">#beetype = beeexamples.rosenbrockbee</span><br>
+<span class="co1">#beetype = beeexamples.testbee</span><br>
+<span class="co1">#beetype = beeexamples.funcbee</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">Затем идет задание других параметров алгоритма, назначение которых, думаю, понятно из комментариев к ним:
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock27">
+  <div class="sourceblocktext"><div class="python"><span class="co1"># Количество пчел-разведчиков</span><br>
+scoutbeecount <span class="sy0">=</span> <span class="nu0">300</span><br>
+<br>
+<span class="co1"># Количество пчел, отправляемых на выбранные, но не лучшие участки</span><br>
+selectedbeecount <span class="sy0">=</span> <span class="nu0">10</span><br>
+<br>
+<span class="co1"># Количество пчел, отправляемые на лучшие участки</span><br>
+bestbeecount <span class="sy0">=</span> <span class="nu0">30</span><br>
+<br>
+<span class="co1"># Количество выбранных, но не лучших, участков</span><br>
+selsitescount <span class="sy0">=</span> <span class="nu0">15</span><br>
+<br>
+<span class="co1"># Количество лучших участков</span><br>
+bestsitescount <span class="sy0">=</span> <span class="nu0">5</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">А вот дальше располагаются параметры, о которых нужно рассказать поподробнее.
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock28">
+  <div class="sourceblocktext"><div class="python"><span class="co1"># Количество запусков алгоритма</span><br>
+runcount <span class="sy0">=</span> <span class="nu0">1</span><br>
+<br>
+<span class="co1"># Максимальное количество итераций</span><br>
+maxiteration <span class="sy0">=</span> <span class="nu0">1000</span><br>
+<br>
+<span class="co1"># Через такое количество итераций без нахождения лучшего решения уменьшим область поиска</span><br>
+max_func_counter <span class="sy0">=</span> <span class="nu0">10</span> &nbsp; </div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace"><em>runcount</em> - это количество независимых запусков алгоритма. Так как алгоритм во многом зависит от случайных величин, то многократный запуск, а также усреднение по всем запускам будет более наглядно показывать сходимость алгоритма, чем запуск только один раз. Хотя в данном случае по умолчанию алгоритм запускается именно один раз.
+</p>
+<p class="vspace"><em>maxiteration</em> - это максимальное количество итераций алгоритма. В данном случае это единственный критерий останова. Это сделано для того, чтобы было проще усреднять результаты работы по нескольким запускам. Если бы был введен еще другой критерий останова, то в классе для сбора статистика для каждого запуска списки с результатами были бы разной длины.
+</p>
+<p class="vspace"><em>max_func_counter</em> определяет через сколько итераций, которые не дают лучшего решения, будут уменьшаться размеры областей для поиска решения. То есть в данном случае, если в течение 10 итераций не будет найдено решение лучше, чем было до этого, то область, задаваемая списком hive.range, будет уменьшена в соответствии со списком, возвращаемым статическим методом <em>getrangekoeff()</em> класса пчелы, то есть в данном случае размер будет умножен на 0.98.
+</p>
+<p class="vspace">Рассмотрим еще некоторые частки кода внутри цикла по количеству запусков алгоритма. Во-первых, создается класс улея:
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock29">
+  <div class="sourceblocktext"><div class="python">currhive <span class="sy0">=</span> pybee.<span class="me1">hive</span> <span class="br0">(</span>scoutbeecount<span class="sy0">,</span> selectedbeecount<span class="sy0">,</span> bestbeecount<span class="sy0">,</span> \<br>
+&nbsp; &nbsp; selsitescount<span class="sy0">,</span> bestsitescount<span class="sy0">,</span> \<br>
+&nbsp; &nbsp; beetype.<span class="me1">getstartrange</span><span class="br0">(</span><span class="br0">)</span><span class="sy0">,</span> beetype<span class="br0">)</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">Сразу же добавляем текущее лучшее решение в статистику 
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock30">
+  <div class="sourceblocktext"><div class="python"><span class="kw3">stat</span>.<span class="me1">add</span> <span class="br0">(</span>runnumber<span class="sy0">,</span> currhive<span class="br0">)</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">Создаются необходимые переменные для подсчета количества неудачных итераций (когда более хорошее решение не было найдено)
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock31">
+  <div class="sourceblocktext"><div class="python"><span class="co1"># Начальное значение целевой функции</span><br>
+best_func <span class="sy0">=</span> -<span class="nu0">1.0e9</span><br>
+<br>
+<span class="co1"># Количество итераций без улучшения целевой функции</span><br>
+func_counter <span class="sy0">=</span> <span class="nu0">0</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">И основной цикл по всем итерациям. Про закомментаренные строки мы поговорим чуть позже
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock32">
+  <div class="sourceblocktext"><div class="python"><span class="kw1">for</span> n <span class="kw1">in</span> <span class="kw2">xrange</span> <span class="br0">(</span>maxiteration<span class="br0">)</span>:<br>
+&nbsp; &nbsp; currhive.<span class="me1">nextstep</span> <span class="br0">(</span><span class="br0">)</span><br>
+<br>
+&nbsp; &nbsp; <span class="kw3">stat</span>.<span class="me1">add</span> <span class="br0">(</span>runnumber<span class="sy0">,</span> currhive<span class="br0">)</span><br>
+<br>
+&nbsp; &nbsp; <span class="kw1">if</span> currhive.<span class="me1">bestfitness</span> <span class="sy0">!=</span> best_func:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="co1"># Найдено место, где целевая функция лучше</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; best_func <span class="sy0">=</span> currhive.<span class="me1">bestfitness</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; func_counter <span class="sy0">=</span> <span class="nu0">0</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="co1"># Обновим рисунок роя пчел</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="co1">#plotswarm (currhive, 0, 1)</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">print</span> <span class="st0">"<span class="es0">\n</span>*** iteration %d / %d"</span> % <span class="br0">(</span>runnumber + <span class="nu0">1</span><span class="sy0">,</span> n<span class="br0">)</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">print</span> <span class="st0">"Best position: %s"</span> % <span class="br0">(</span><span class="kw2">str</span> <span class="br0">(</span>currhive.<span class="me1">bestposition</span><span class="br0">)</span> <span class="br0">)</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">print</span> <span class="st0">"Best fitness: %f"</span> % currhive.<span class="me1">bestfitness</span><br>
+&nbsp; &nbsp; <span class="kw1">else</span>:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; func_counter +<span class="sy0">=</span> <span class="nu0">1</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">if</span> func_counter <span class="sy0">==</span> max_func_counter:<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="co1"># Уменьшим размеры участков</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; currhive.<span class="kw2">range</span> <span class="sy0">=</span> <span class="br0">[</span>currhive.<span class="kw2">range</span><span class="br0">[</span>m<span class="br0">]</span> * koeff<span class="br0">[</span>m<span class="br0">]</span> <span class="kw1">for</span> m <span class="kw1">in</span> <span class="kw2">xrange</span> <span class="br0">(</span> <span class="kw2">len</span> <span class="br0">(</span>currhive.<span class="kw2">range</span><span class="br0">)</span> <span class="br0">)</span> <span class="br0">]</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; func_counter <span class="sy0">=</span> <span class="nu0">0</span><br>
+<br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">print</span> <span class="st0">"<span class="es0">\n</span>*** iteration %d / %d (new range)"</span> % <span class="br0">(</span>runnumber + <span class="nu0">1</span><span class="sy0">,</span> n<span class="br0">)</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">print</span> <span class="st0">"New range: %s"</span> % <span class="br0">(</span><span class="kw2">str</span> <span class="br0">(</span>currhive.<span class="kw2">range</span><span class="br0">)</span> <span class="br0">)</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">print</span> <span class="st0">"Best position: %s"</span> % <span class="br0">(</span><span class="kw2">str</span> <span class="br0">(</span>currhive.<span class="me1">bestposition</span><span class="br0">)</span> <span class="br0">)</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="kw1">print</span> <span class="st0">"Best fitness: %f"</span> % currhive.<span class="me1">bestfitness</span><br>
+<br>
+&nbsp; &nbsp; <span class="co1">#if n % 10 == 0:</span><br>
+&nbsp; &nbsp; &nbsp; &nbsp; <span class="co1">#plotswarm (currhive, 2, 3)</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">Итак, <em>n</em> здесь соответствует номеру итерации (начиная с 0). Сначала вызывается метод <em>nextstep()</em> для новой итерации, а затем результат добавляется в статистику. Потом, если на данной итерации было найдено лучшее решение, то оно сохраняется, а в консоль выводится номер итерации, новое найденное решение и значение целевой функции.
+</p>
+<p class="vspace">Если на данной итерации новое решение не найдено, то увеличивается счетчик <em>func_counter</em> для неудачных итераций, и если его значение стало равно <em>max_func_counter</em> (которое мы задали выше), то происходит сужение областей для каждой из координат. После чего, опять же, выводится в консоль номер итерации, новые диапазоны, лучшие на данный момент решение и значение целевой функции.
+</p>
+<p class="vspace">Все остальные строки исходника, в том числе, идущие и после цикла по итерациям, предназначены для наглядного представления результатов работы алгоритма. О них мы сейчас и поговорим.
+</p>
+<p class="vspace">Все функции для визуализации с помощью библиотеки <em>pylab</em> находятся в файле <em>beetestfunc.py</em>.
+</p>
+<p class="vspace">Во-первых, это функция <em>plotswarm()</em>, которая на плоскости отмечает расположение каждой пчелы. В качестве первого параметра в нее необходимо передать экземпляр класса <em>hive</em>. Второй и третий параметры - номера индексов координат пчелы, отображаемые на плоскости. Так как мы рисуем пчел на плоскости, а у целевой функции может быть больше параметров (координат пчелы), то мы можем отобразить только две координаты, которые и задаются с помощью этих двух параметров. 
+</p>
+<p class="vspace">По умолчанию отображение пчел отключено для ускорения счета, но вы можете его включить, причем обновление рисунка может происходить в двух случаях: если было найдено более хорошее решение, и может быть обновление на каждой 10-ой итерации. Для первого случая раскомментарьте строку 
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock33">
+  <div class="sourceblocktext"><div class="python"><span class="co1">#beetestfunc.plotswarm (currhive, 0, 1)</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">после комментария
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock34">
+  <div class="sourceblocktext"><div class="python"><span class="co1"># Обновим рисунок роя пчел</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">Во втором случае раскомментарьте две строки
+</p>
+<div class="vspace"></div>
+<div class="sourceblock " id="sourceblock35">
+  <div class="sourceblocktext"><div class="python"><span class="co1">#if n % 10 == 0:</span><br>
+&nbsp; &nbsp; <span class="co1">#beetestfunc.plotswarm (currhive, 2, 3)</span></div></div>
+  <div class="sourceblocklink"></div>
+</div>
+
+<p class="vspace">Надо сразу отметить, что для простоты и наглядности скрипта отображение роя пчел происходит в том же потоке (в смысле thread), что и выполнение основного алгоритма, поэтому обновление картинки может "виснуть", если переключиться на другое приложение, при этом сам алгоритм будет работать.
+</p>
+<p class="vspace">На анимации внизу вы можете увидеть как пчелы постепенно скапливаются вокруг одного лучшего решения. На этом рисунке красные точки - пчелы, нашедшие лучшие решения, желтый точки - выбранные решения, а черные точки - остальные пчелы, включая пчел-разведчиков, которые располагаются случайным образом.
+</p>
+<div class="vspace"></div><div class="img imgonly"><img src="./Алгоритм пчел для оптимизации функции_files/sphere_anim_small.gif" alt="" title=""></div>
+<p class="vspace">В данном примере использовался класс пчел <em>spherebee</em> с количеством координат <em>count</em> = 4.
+</p>
+<p class="vspace">В конце расчета выводятся графики сходимости решения и значения целевой функции в зависимости от номера итерации. Для большей наглядности на следующих картинках приведены примеры из другой целевой функции (класс <em>funcbee</em>, который здесь не описан).
+</p>
+<p class="vspace">Рост целевой функции при одном запуске алгоритма:
+</p>
+<div class="vspace"></div><div class="img imgonly"><img src="./Алгоритм пчел для оптимизации функции_files/bee_fitness_1_func.png" alt="" title=""></div>
+<p class="vspace">Рост целевой функции, усредненный по 10 запускам алгоритма:
+</p>
+<div class="vspace"></div><div class="img imgonly"><img src="./Алгоритм пчел для оптимизации функции_files/bee_fitness_aver_func.png" alt="" title=""></div>
+<p class="vspace">Сходимость решений при одном запуске алгоритма:
+</p>
+<div class="vspace"></div><div class="img imgonly"><img src="./Алгоритм пчел для оптимизации функции_files/bee_position_func.png" alt="" title=""></div>
+<p class="vspace">Уменьшение размеров областей для каждой из координат:
+</p>
+<div class="vspace"></div><div class="img imgonly"><img src="./Алгоритм пчел для оптимизации функции_files/bee_range_func.png" alt="" title=""></div>
+<p class="vspace"><a name="outro" id="outro"></a>
+</p><h2>Заключение</h2>
+<p>Мы с вами рассмотрели алгоритм пчел для нахождений глобального экстремума функции и заодно посмотрели возможную реализацию на языке Python. В исходниках, которые вы можете скачать, есть 6 классов пчел для различных целевых функций, 5 из этих функций которых в качестве примеров приводятся в [3]. Судя по этой же статье, алгоритм пчел намного быстрее сходится к правильному решению чем, например, генетический алгоритм.
+</p>
+<p class="vspace">Очень надеюсь, что удалось доходчиво объяснить суть алгоритма и пример реализации, если есть вопросы, пишите в комментарии.
+</p>
+<p class="vspace"><a name="links" id="links"></a>
+</p><h2>Ссылки</h2>
+<p>[1] Pham DT, Ghanbarzadeh A, Koc E, Otri S, Rahim S and Zaidi M. The Bees Algorithm. Technical Note, Manufacturing Engineering Centre, Cardiff University, UK, 2005
+</p>
+<p class="vspace">[2] D. Karaboga, AN IDEA BASED ON HONEY BEE SWARM FOR NUMERICAL OPTIMIZATION,TECHNICAL REPORT-TR06,Erciyes University, Engineering Faculty, Computer Engineering Department 2005.
+</p>
+<p class="vspace">[3] The Bees Algorithm – A Novel Tool for Complex Optimisation Problems D.T. Pham, A. Ghanbarzadeh, E. Koc, S. Otri , S. Rahim , M. Zaidi Manufacturing Engineering Centre, Cardiff University, Cardiff CF24 3AA, UK. Скачать эту статью можно <a class="urllink" 
+
+
+</body></html>

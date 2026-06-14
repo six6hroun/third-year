@@ -1,0 +1,60 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: Arial;
+}
+
+.panel {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 0 5px rgba(0,0,0,.2);
+}
+
+#controls {
+    top: 10px;
+    left: 10px;
+    width: 260px;
+}
+
+#info {
+    top: 10px;
+    right: 10px;
+    width: 180px;
+}
+
+#chart-container {
+    right: 10px;
+    bottom: 10px;
+    width: 320px;
+    height: 200px;
+}
+
+.param-row {
+    margin: 6px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 6px;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.generation-counter {
+    position: absolute;
+    left: 300px;
+    top: 10px;
+    background: white;
+    padding: 10px;
+    border: 1px solid #4CAF50;
+    border-radius: 6px;
+    font-size: 18px;
+}
